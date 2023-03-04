@@ -1,18 +1,15 @@
 require("dotenv").config();
 const Telegraf = require("telegraf").Telegraf;
 const message = require("telegraf/filters").message;
+//const echo = require("./services/telegram/actions/echo");
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
-bot.on(message("text"), async (ctx) => {
-  await ctx.telegram.sendMessage(
-    ctx.message.chat.id,
-    `Hello ${ctx.state.role}`
-  );
-});
+function start() {
+  bot.launch();
+  console.log("Telegram is working");
+}
 
-bot.launch();
+//bot.on(message("text"), async (ctx) => echo.echo(ctx));
 
-console.log("hey");
-
-module.exports.bot = bot;
+module.exports.start = start;

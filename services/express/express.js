@@ -1,8 +1,10 @@
 const express = require("express");
 const server = express();
 
-const port = 7777;
+const port = process.env.SERVER_PORT;
 
-server.listen(port, () => console.log("Listening on port", port));
+function start() {
+  server.listen(port, () => console.log("Server starts on port", port));
+}
 
-module.exports.server = server;
+module.exports.start = start;
