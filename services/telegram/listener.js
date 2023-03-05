@@ -1,25 +1,25 @@
 const { bot } = require("./telegram");
-const message = require("telegraf/filters").message;
-const { echo } = require("../slack/actions");
+const processContext = require("../../processes/processContext/processContext");
+const { sendMessageToSlack } = require("../slack/actions/actions");
 
 function getContext(message) {
   const msg = String.prototype.toLowerCase(message);
   if (msg === "• погладить котика •") {
-    return "meow";
+    return "tMeow";
   }
   if (msg === "• узнать про другие задачники •") {
-    return "getInfoAboutModules";
+    return "tGetInfoAboutModules";
   }
   if (msg === "• сменить email •") {
-    return "changeMail";
+    return "tChangeMail";
   }
   if (msg === "• забрать сертификат •") {
-    return "getDiploma";
+    return "tGetDiploma";
   }
   if (msg.includes("задачник по логике")) {
-    return "getLogicModule";
+    return "tGetLogicModule";
   }
-  return "manual";
+  return "tManual";
 }
 
 function telegramListenerRun() {
@@ -29,8 +29,11 @@ function telegramListenerRun() {
     const ts = ctx.message.date;
     const context = getContext(message);
     const data = await processContext({ message, userId, ts, context });
-    const answer = processAnswer(data);
-    sendAnswer(userId, answer);
+    sendMessageToSlack(data);
+    if (data.type === "mainMessage") {
+      const answer = processAnswer(data);
+      ctx.sendMessage(userId, answer);
+    }
   });
   bot.on("photo", async (ctx) => echo(ctx.message.text));
   bot.on("document", async (ctx) => echo(ctx.message.text));
