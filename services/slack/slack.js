@@ -1,10 +1,19 @@
 const { App } = require("@slack/bolt");
+const { WebClient } = require("@slack/web-api");
 
+// Read a token from the environment variables
+const token = process.env.SLACK_TOKEN;
+const secret = process.env.SLACK_SECRET;
 const port = process.env.SLACK_PORT;
 
+// Initialize
+const web = new WebClient(token);
+
 const slack = new App({
-  signingSecret: process.env.SLACK_SECRET,
-  token: process.env.SLACK_TOKEN,
+  signingSecret: secret,
+  token: token,
+  socketMode: true,
+  appToken: process.env.SLACK_APP_TOKEN,
 });
 
 async function start() {
@@ -13,3 +22,5 @@ async function start() {
 }
 
 module.exports.start = start;
+module.exports.listener = slack;
+module.exports.web = web;
