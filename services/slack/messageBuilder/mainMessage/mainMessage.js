@@ -1,4 +1,4 @@
-function mainMessage({ user, message }) {
+function mainMessage({ user, message, att }) {
   const informerMessage = `${user?.firstName} ${user?.lastName}: ${message}`;
   var userInfo = `*<https://t.me/${user?.username}|${user?.firstName} ${user?.lastName}>*`;
   if (user?.email) {
@@ -24,12 +24,20 @@ function mainMessage({ user, message }) {
         type: "section",
         text: {
           type: "plain_text",
-          text: message,
+          text: message || " ",
           emoji: true,
         },
       },
     ],
   };
+
+  if (att.image) {
+    form.blocks.push({
+      type: "image",
+      image_url: att.image,
+      alt_text: "An incredibly cute kitten.",
+    });
+  }
   return form;
 }
 

@@ -1,6 +1,6 @@
 const { getDBRequest } = require("../../../services/database/requests");
 
-async function forwardMessagetoSlack({ message, userId, ts }) {
+async function forwardMessageToSlack({ userId, message, att, ts }) {
   const user = await getDBRequest("getUserInfo", { query: { userId } });
   const email = user.email;
   const now = Date.now();
@@ -19,7 +19,7 @@ async function forwardMessagetoSlack({ message, userId, ts }) {
     user.modules = activeModules;
   }
 
-  return { user, message };
+  return { user, message, att };
 }
 
-module.exports = forwardMessagetoSlack;
+module.exports = forwardMessageToSlack;

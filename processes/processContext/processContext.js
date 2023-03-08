@@ -1,9 +1,9 @@
 const forwardMessageToSlack = require("./forwardMessageToSlack/forwardMessageToSlack");
 
-function processContext({ message, userId, ts, context }) {
+function processContext(context, { userId, message, att, ts }) {
   switch (context) {
     case "tManual":
-      return forwardMessageToSlack({ message, userId, ts });
+      return forwardMessageToSlack({ userId, message, att, ts });
   }
 }
 
