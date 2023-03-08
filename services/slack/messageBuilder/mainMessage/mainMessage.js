@@ -5,7 +5,7 @@ function mainMessage({ user, message }) {
     userInfo += ` / ${user?.email}`;
   }
   if (user?.modules) {
-    userInfo += ` / `;
+    userInfo += ` / ${user.modules.join(", ")}`;
   }
   const form = {
     channel: process.env.SLACK_CHANNEL,
