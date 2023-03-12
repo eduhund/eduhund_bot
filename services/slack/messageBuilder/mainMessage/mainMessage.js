@@ -38,6 +38,17 @@ function mainMessage({ user, message, att }) {
       alt_text: "An incredibly cute kitten.",
     });
   }
+
+  if (att.document) {
+    form.blocks.push({
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `*<${att.document}|Посмотреть вложение>*`,
+      },
+    });
+  }
+
   return form;
 }
 

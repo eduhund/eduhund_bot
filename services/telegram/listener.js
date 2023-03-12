@@ -28,10 +28,17 @@ function telegramListenerRun() {
     const message = ctx.message.text || ctx.message.caption;
     const userId = ctx.message.from.id;
     const ts = ctx.message.date;
-    const image = ctx.message.photo;
+    const image = ctx.message.photo || ctx.message.sticker;
+    const document = ctx.message.document;
+    const video = ctx.message.video || ctx.message.video_note;
+    const audio = ctx.message.audio || ctx.message.voice;
     const imageUrl = image ? await getFileUrl(image) : undefined;
+    const docUrl = document ? await getFileUrl(document) : undefined;
+    const videoUrl = video ? await getFileUrl(video) : undefined;
+    const audioUrl = audio ? await getFileUrl(audio) : undefined;
     const att = {
       image: imageUrl,
+      document: docUrl || videoUrl || audioUrl,
     };
     const context = getContext(message);
     const data = await processContext(context, { userId, message, att, ts });

@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const { bot } = require("../telegram");
 
 async function getFileUrl(att) {
-  const fileId = att[att.length - 1].file_id || att.file_id || undefined;
+  const fileId = att[att.length - 1]?.file_id || att?.file_id || undefined;
   if (!fileId) {
     return;
   }
