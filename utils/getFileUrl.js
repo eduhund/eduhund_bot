@@ -21,6 +21,7 @@ async function getSlackFileUrl(file) {
   if (!file) {
     return;
   }
+
   const data = await fetch(
     `${process.env.S_FILE_DOWNLOADER}?fileUrl=${file.url}&name=${file.name}&type=${file.type}`,
     {

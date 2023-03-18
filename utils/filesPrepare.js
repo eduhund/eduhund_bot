@@ -6,11 +6,10 @@ async function filesPrepare(files = []) {
     for (const file of files) {
       const data = {
         name: file.name,
-        type: file.pretty_type,
+        type: file.filetype,
         url: file.url_private_download,
       };
-      const newUrl = await getSlackFileUrl(data);
-      data.url = newUrl;
+      data.url = await getSlackFileUrl(data);
       preparedFiles.push(data);
     }
     return preparedFiles;
