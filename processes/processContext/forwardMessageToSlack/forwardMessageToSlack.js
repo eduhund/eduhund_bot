@@ -8,9 +8,9 @@ async function forwardMessageToSlack({ telegramUserId, text, att, ts }) {
     query: { userId: telegramUserId },
   });
   const thread = await getDBRequest("getThread", {
-    query: { telegramUserId: user?.userId, active: true },
+    query: { userId: user?.userId, active: true },
   });
-  threadTs = thread?.thread;
+  const threadId = thread?.threadId;
   const email = user.email;
   var activeModules = [];
   if (email) {
@@ -27,21 +27,40 @@ async function forwardMessageToSlack({ telegramUserId, text, att, ts }) {
     user.modules = activeModules;
   }
 
-  const responseTs = await sendMessageToSlack({ user, text, threadTs, att });
+  const responseTs = await sendMessageToSlack({ user, text, threadId, att });
 
-  if (!threadTs) {
+  if (!threadId) {
     const query = {
-      telegramUserId: user.userId,
-      type: "student",
-      thread: responseTs,
+      userId: user.userId,
+      source: "telegram",
+      dest: "slack",
+      role: "student",
+      ts,
       text,
+      threadId: responseTs,
       active: true,
-      lastMessage: Date.now(),
+      talk: [],
+      lastIncMessage: Date.now(),
     };
     getDBRequest("createThread", {
       query,
     });
     sendMessageToTelegram({ telegramUserId, intent: "newThread", lang: "ru" });
+  } else {
+    getDBRequest("updateThread", {
+      query: { threadId: threadId, active: true },
+      data: {
+        lastOutMessage: now,
+        newMessage: {
+          userId: telegramUserId,
+          source: "telegram",
+          dest: "slack",
+          role: "student",
+          text,
+          ts: now,
+        },
+      },
+    });
   }
 
   return true;

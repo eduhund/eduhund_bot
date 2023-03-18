@@ -1,9 +1,9 @@
-function threadMessage({ user, text, threadTs, att }) {
+function threadMessage({ user, text, threadId, att }) {
   const informerMessage = `${user?.firstName} ${user?.lastName}: ${text}`;
   const form = {
     channel: process.env.SLACK_CHANNEL,
     text: informerMessage,
-    thread_ts: threadTs,
+    thread_ts: threadId,
     blocks: [
       {
         type: "section",

@@ -26,7 +26,7 @@ function getPhrase(lang, intent) {
       case "string":
         return selPhrase;
       case "object":
-        return selPhrase[randomInteger(0, selPhrase.length)];
+        return selPhrase[randomInteger(0, selPhrase.length - 1)];
       default:
         throw new Error(`Type of content ${typeof selPhrase} is not defined`);
     }

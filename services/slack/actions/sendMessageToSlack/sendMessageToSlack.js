@@ -3,15 +3,15 @@ const threadMessage = require("@sl/messageBuilder/threadMessage/threadMessage");
 
 const { web } = require("@sl/slack");
 
-async function sendMessageToSlack({ user, text, threadTs, att }) {
-  if (!threadTs) {
+async function sendMessageToSlack({ user, text, threadId, att }) {
+  if (!threadId) {
     const response = await web.chat.postMessage(
       mainMessage({ user, text, att })
     );
     return response?.ts;
   } else {
-    await web.chat.postMessage(threadMessage({ user, text, threadTs, att }));
-    return threadTs;
+    await web.chat.postMessage(threadMessage({ user, text, threadId, att }));
+    return threadId;
   }
 }
 
