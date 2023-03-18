@@ -1,6 +1,6 @@
 const { listener } = require("./slack");
-const { echo } = require("../telegram/actions/actions");
 const processContext = require("../../processes/processContext/processContext");
+const { filesPrepare } = require("../../utils/filesPrepare");
 
 function getContext(message) {
   if (
@@ -18,8 +18,9 @@ function slackListenerRun() {
     const text = message.text;
     const threadTs = message.thread_ts;
     const slackUserId = message.user;
+    const att = await filesPrepare(message.files);
     const context = getContext(message);
-    processContext(context, { slackUserId, text, threadTs });
+    processContext(context, { slackUserId, text, threadTs, att });
   });
 }
 

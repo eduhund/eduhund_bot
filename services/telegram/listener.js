@@ -1,6 +1,6 @@
 const { bot } = require("./telegram");
 const processContext = require("../../processes/processContext/processContext");
-const { getFileUrl } = require("./services/getFileUrl");
+const { getTelegramFileUrl } = require("../../utils/getFileUrl");
 
 function getContext(message) {
   const msg = String.prototype.toLowerCase(message);
@@ -31,10 +31,10 @@ function telegramListenerRun() {
     const document = ctx.message.document;
     const video = ctx.message.video || ctx.message.video_note;
     const audio = ctx.message.audio || ctx.message.voice;
-    const imageUrl = image ? await getFileUrl(image) : undefined;
-    const docUrl = document ? await getFileUrl(document) : undefined;
-    const videoUrl = video ? await getFileUrl(video) : undefined;
-    const audioUrl = audio ? await getFileUrl(audio) : undefined;
+    const imageUrl = image ? await getTelegramFileUrl(image) : undefined;
+    const docUrl = document ? await getTelegramFileUrl(document) : undefined;
+    const videoUrl = video ? await getTelegramFileUrl(video) : undefined;
+    const audioUrl = audio ? await getTelegramFileUrl(audio) : undefined;
     const att = {
       image: imageUrl,
       document: docUrl || videoUrl || audioUrl,
