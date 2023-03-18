@@ -1,10 +1,6 @@
-const { getDBRequest } = require("../../../services/database/requests");
-const {
-  sendMessageToSlack,
-} = require("../../../services/slack/actions/actions");
-const {
-  sendMessageToTelegram,
-} = require("../../../services/telegram/actions/actions");
+const { getDBRequest } = require("@mg/requests");
+const { sendMessageToSlack } = require("@sl/actions/actions");
+const { sendMessageToTelegram } = require("@tg/actions/actions");
 
 async function forwardMessageToSlack({ telegramUserId, text, att, ts }) {
   const now = Date.now();
@@ -42,7 +38,7 @@ async function forwardMessageToSlack({ telegramUserId, text, att, ts }) {
       active: true,
       lastMessage: Date.now(),
     };
-    getDBRequest("addThread", {
+    getDBRequest("createThread", {
       query,
     });
     sendMessageToTelegram({ telegramUserId, intent: "newThread", lang: "ru" });

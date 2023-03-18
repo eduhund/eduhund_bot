@@ -1,6 +1,6 @@
 const { THREADS } = require("../mongo");
 
-function addThread({ query = {}, returns = [] }) {
+function createThread({ query = {}, returns = [] }) {
   const projection = {
     _id: 0,
   };
@@ -10,4 +10,4 @@ function addThread({ query = {}, returns = [] }) {
   return THREADS.insertOne(query, { projection });
 }
 
-module.exports.addThread = addThread;
+module.exports.createThread = createThread;

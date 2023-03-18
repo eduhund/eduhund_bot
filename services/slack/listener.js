@@ -1,6 +1,6 @@
 const { listener } = require("./slack");
-const processContext = require("../../processes/processContext/processContext");
-const { filesPrepare } = require("../../utils/filesPrepare");
+const processContext = require("@processes/processContext/processContext");
+const { filesPrepare } = require("@utils/filesPrepare");
 
 function getContext(message) {
   if (

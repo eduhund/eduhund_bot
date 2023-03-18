@@ -1,6 +1,6 @@
 const { bot } = require("./telegram");
-const processContext = require("../../processes/processContext/processContext");
-const { getTelegramFileUrl } = require("../../utils/getFileUrl");
+const processContext = require("@processes/processContext/processContext");
+const { getTelegramFileUrl } = require("@utils/getFileUrl");
 
 function getContext(message) {
   const msg = String.prototype.toLowerCase(message);

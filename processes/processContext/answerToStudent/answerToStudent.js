@@ -1,8 +1,6 @@
-const { getDBRequest } = require("../../../services/database/requests");
+const { getDBRequest } = require("@mg/requests");
 
-const {
-  forwardMessageToTelegram,
-} = require("../../../services/telegram/actions/actions");
+const { forwardMessageToTelegram } = require("@tg/actions/actions");
 
 async function answerToStudent({ slackId, threadTs, text, att }) {
   const now = Date.now();

@@ -1,12 +1,12 @@
 const { getUserInfo } = require("./getUserInfo/getUserInfo");
 const { getStudentInfo } = require("./getStudentInfo/getStudentInfo");
-const { addThread } = require("./addThread/addThread");
+const { createThread } = require("./createThread/createThread");
 const { getThread } = require("./getThread/getThread");
 
 const REQUESTS = {
   getUserInfo,
   getStudentInfo,
-  addThread,
+  createThread,
   getThread,
 };
 

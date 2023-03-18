@@ -1,7 +1,7 @@
-const mainMessage = require("../../messageBuilder/mainMessage/mainMessage");
-const threadMessage = require("../../messageBuilder/threadMessage/threadMessage");
+const mainMessage = require("@sl/messageBuilder/mainMessage/mainMessage");
+const threadMessage = require("@sl/messageBuilder/threadMessage/threadMessage");
 
-const { web } = require("../../slack");
+const { web } = require("@sl/slack");
 
 async function sendMessageToSlack({ user, text, threadTs, att }) {
   if (!threadTs) {

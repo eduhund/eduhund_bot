@@ -1,5 +1,5 @@
-const { getPhrase } = require("../../../../assets/dict/dict");
-const { bot } = require("../../telegram");
+const { getPhrase } = require("@assets/dict/dict");
+const { bot } = require("@tg/telegram");
 
 async function sendMessageToTelegram({ telegramUserId, intent, lang }) {
   const text = getPhrase(lang, intent);

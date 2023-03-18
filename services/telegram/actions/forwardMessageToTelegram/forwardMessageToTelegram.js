@@ -1,4 +1,4 @@
-const { bot } = require("../../telegram");
+const { bot } = require("@tg/telegram");
 
 async function forwardMessageToTelegram({ telegramUserId, text, att }) {
   if (att.length === 0) {
