@@ -1,5 +1,5 @@
-function mainMessage({ user, message, att }) {
-  const informerMessage = `${user?.firstName} ${user?.lastName}: ${message}`;
+function mainMessage({ user, text, att }) {
+  const informerMessage = `${user?.firstName} ${user?.lastName}: ${text}`;
   var userInfo = `*<https://t.me/${user?.username}|${user?.firstName} ${user?.lastName}>*`;
   if (user?.email) {
     userInfo += ` / ${user?.email}`;
@@ -24,7 +24,7 @@ function mainMessage({ user, message, att }) {
         type: "section",
         text: {
           type: "plain_text",
-          text: message || " ",
+          text: text || " ",
           emoji: true,
         },
       },

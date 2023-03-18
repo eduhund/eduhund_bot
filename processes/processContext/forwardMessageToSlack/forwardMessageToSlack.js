@@ -1,10 +1,18 @@
 const { getDBRequest } = require("../../../services/database/requests");
+const {
+  sendMessageToSlack,
+} = require("../../../services/slack/actions/actions");
+const {
+  sendMessageToTelegram,
+} = require("../../../services/telegram/actions/actions");
 
-async function forwardMessageToSlack({ userId, message, att, ts }) {
+async function forwardMessageToSlack({ telegramUserId, text, att, ts }) {
   const now = Date.now();
-  const user = await getDBRequest("getUserInfo", { query: { userId } });
+  const user = await getDBRequest("getUserInfo", {
+    query: { userId: telegramUserId },
+  });
   const thread = await getDBRequest("getThread", {
-    query: { telegramId: user?.userId, active: true },
+    query: { telegramUserId: user?.userId, active: true },
   });
   threadTs = thread?.thread;
   const email = user.email;
@@ -23,7 +31,24 @@ async function forwardMessageToSlack({ userId, message, att, ts }) {
     user.modules = activeModules;
   }
 
-  return { user, message, threadTs, att };
+  const responseTs = await sendMessageToSlack({ user, text, threadTs, att });
+
+  if (!threadTs) {
+    const query = {
+      telegramUserId: user.userId,
+      type: "student",
+      thread: responseTs,
+      text,
+      active: true,
+      lastMessage: Date.now(),
+    };
+    getDBRequest("addThread", {
+      query,
+    });
+    sendMessageToTelegram({ telegramUserId, intent: "newThread", lang: "ru" });
+  }
+
+  return true;
 }
 
 module.exports = forwardMessageToSlack;

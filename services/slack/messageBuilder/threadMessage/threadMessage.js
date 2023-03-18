@@ -1,5 +1,5 @@
-function threadMessage({ user, message, threadTs, att }) {
-  const informerMessage = `${user?.firstName} ${user?.lastName}: ${message}`;
+function threadMessage({ user, text, threadTs, att }) {
+  const informerMessage = `${user?.firstName} ${user?.lastName}: ${text}`;
   const form = {
     channel: process.env.SLACK_CHANNEL,
     text: informerMessage,
@@ -9,7 +9,7 @@ function threadMessage({ user, message, threadTs, att }) {
         type: "section",
         text: {
           type: "plain_text",
-          text: message || " ",
+          text: text || " ",
           emoji: true,
         },
       },

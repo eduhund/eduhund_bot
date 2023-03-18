@@ -1,6 +1,5 @@
 const { bot } = require("./telegram");
 const processContext = require("../../processes/processContext/processContext");
-const { sendMessageToSlack } = require("../slack/actions/actions");
 const { getFileUrl } = require("./services/getFileUrl");
 
 function getContext(message) {
@@ -25,8 +24,8 @@ function getContext(message) {
 
 function telegramListenerRun() {
   bot.on("message", async (ctx) => {
-    const message = ctx.message.text || ctx.message.caption;
-    const userId = ctx.message.from.id;
+    const text = ctx.message.text || ctx.message.caption;
+    const telegramUserId = ctx.message.from.id;
     const ts = ctx.message.date;
     const image = ctx.message.photo || ctx.message.sticker;
     const document = ctx.message.document;
@@ -40,13 +39,8 @@ function telegramListenerRun() {
       image: imageUrl,
       document: docUrl || videoUrl || audioUrl,
     };
-    const context = getContext(message);
-    const data = await processContext(context, { userId, message, att, ts });
-    sendMessageToSlack(data);
-    if (data.type === "mainMessage") {
-      const answer = processAnswer(data);
-      ctx.sendMessage(userId, answer);
-    }
+    const context = getContext(text);
+    processContext(context, { telegramUserId, text, att, ts });
   });
 
   //Not supported yet
