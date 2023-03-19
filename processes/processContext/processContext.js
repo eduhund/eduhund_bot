@@ -1,6 +1,8 @@
 const userStart = require("./userStart/userStart");
 const userHelp = require("./userHelp/userHelp");
 const userSettings = require("./userSettings/userSettings");
+const userChangeEmail = require("./userChangeEmail/userChangeEmail");
+const userCancel = require("./userCancel/userCancel");
 const forwardMessageToSlack = require("./forwardMessageToSlack/forwardMessageToSlack");
 const answerToStudent = require("./answerToStudent/answerToStudent");
 
@@ -12,6 +14,11 @@ function processContext(context, data) {
       return userHelp(data);
     case "tSettings":
       return userSettings(data);
+    case "tChangeEmail":
+    case "tChangeEmailButton":
+      return userChangeEmail(data);
+    case "tCancelButton":
+      return userCancel(data);
     case "tManual":
       return forwardMessageToSlack(data);
     case "sAnswer":

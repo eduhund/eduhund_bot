@@ -40,7 +40,7 @@ async function answerToStudent({ slackUserId, threadTs, text, att }) {
     },
   });
 
-  return true;
+  return { OK: true, newBotContext: undefined };
 }
 
 module.exports = answerToStudent;

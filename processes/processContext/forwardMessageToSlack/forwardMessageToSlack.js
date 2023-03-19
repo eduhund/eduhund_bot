@@ -2,10 +2,10 @@ const { getDBRequest } = require("@mg/requests");
 const { sendMessageToSlack } = require("@sl/actions/actions");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-async function forwardMessageToSlack({ telegramUserId, text, att }) {
+async function forwardMessageToSlack({ telegramUser, text, att }) {
   const now = Date.now();
   const user = await getDBRequest("getUserInfo", {
-    query: { userId: telegramUserId },
+    query: { userId: telegramUser.id },
   });
   const thread = await getDBRequest("getThread", {
     query: { userId: user?.userId, active: true },
@@ -59,14 +59,14 @@ async function forwardMessageToSlack({ telegramUserId, text, att }) {
     getDBRequest("createThread", {
       query,
     });
-    sendMessageToTelegram({ telegramUserId, intent: "newThread", lang: "ru" });
+    sendMessageToTelegram({ telegramUser, intent: "newThread", lang: "ru" });
   } else {
     getDBRequest("updateThread", {
       query: { threadId: threadId, active: true },
       data: {
         lastOutMessage: now,
         newMessage: {
-          userId: telegramUserId,
+          userId: telegramUser.id,
           source: "telegram",
           dest: "slack",
           role: "student",
@@ -77,7 +77,7 @@ async function forwardMessageToSlack({ telegramUserId, text, att }) {
     });
   }
 
-  return true;
+  return { OK: true, newBotContext: undefined };
 }
 
 module.exports = forwardMessageToSlack;

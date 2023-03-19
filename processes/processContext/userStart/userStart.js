@@ -55,7 +55,7 @@ async function userStart({ telegramUser }) {
     },
   });
 
-  return true;
+  return { OK: true, newBotContext: undefined };
 }
 
 module.exports = userStart;

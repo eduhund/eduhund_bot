@@ -2,8 +2,14 @@ const { bot } = require("./telegram");
 const processContext = require("@processes/processContext/processContext");
 const { getTelegramFileUrl } = require("@utils/getFileUrl");
 
-function getContext(message) {
+function getContext(message, botContext) {
   const msg = String.prototype.toLowerCase(message);
+  if (botContext) {
+    switch (botContext) {
+      case "changeEmail":
+        return "tChangeEmail";
+    }
+  }
   if (msg === "• погладить котика •") {
     return "tMeow";
   }
@@ -41,9 +47,21 @@ function telegramListenerRun() {
     processContext(context, { telegramUser });
   });
 
+  bot.on("callback_query", async (ctx) => {
+    const telegramUser = ctx.callbackQuery.from;
+    const context = ctx.callbackQuery.data;
+    const botContext = ctx.session;
+    const response = await processContext(context, {
+      telegramUser,
+      botContext,
+    });
+    ctx.session = response?.newBotContext;
+  });
+
   bot.on("message", async (ctx) => {
+    const botContext = ctx.session;
     const text = ctx.message.text || ctx.message.caption;
-    const telegramUserId = ctx.message.from.id;
+    const telegramUser = ctx.message.from;
     const image = ctx.message.photo || ctx.message.sticker;
     const document = ctx.message.document;
     const video = ctx.message.video || ctx.message.video_note;
@@ -56,8 +74,14 @@ function telegramListenerRun() {
       image: imageUrl,
       document: docUrl || videoUrl || audioUrl,
     };
-    const context = getContext(text);
-    processContext(context, { telegramUserId, text, att });
+    const context = getContext(text, botContext);
+    const response = await processContext(context, {
+      telegramUser,
+      text,
+      att,
+      botContext,
+    });
+    ctx.session = response?.newBotContext;
   });
 
   //Not supported yet

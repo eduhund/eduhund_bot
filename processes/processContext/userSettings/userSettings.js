@@ -22,7 +22,7 @@ async function userHelp({ telegramUser }) {
     });
   }
 
-  return true;
+  return { OK: true, newBotContext: undefined };
 }
 
 module.exports = userHelp;
