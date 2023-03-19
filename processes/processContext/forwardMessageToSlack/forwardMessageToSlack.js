@@ -29,18 +29,32 @@ async function forwardMessageToSlack({ telegramUserId, text, att, ts }) {
 
   const responseTs = await sendMessageToSlack({ user, text, threadId, att });
 
+  const query = {
+    userId: user.userId,
+    source: "telegram",
+    dest: "slack",
+    role: "student",
+    ts: now,
+    text,
+    threadId: responseTs,
+  };
+
+  getDBRequest("addToHistory", {
+    query,
+  });
+
   if (!threadId) {
     const query = {
       userId: user.userId,
       source: "telegram",
       dest: "slack",
       role: "student",
-      ts,
+      ts: now,
       text,
       threadId: responseTs,
       active: true,
       talk: [],
-      lastIncMessage: Date.now(),
+      lastIncMessage: now,
     };
     getDBRequest("createThread", {
       query,

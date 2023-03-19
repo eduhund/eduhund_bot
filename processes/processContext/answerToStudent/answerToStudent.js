@@ -11,6 +11,20 @@ async function answerToStudent({ slackUserId, threadTs, text, att }) {
 
   forwardMessageToTelegram({ telegramUserId, text, att });
 
+  const query = {
+    userId: slackUserId,
+    source: "slack",
+    dest: "telegram",
+    role: "teacher",
+    text,
+    ts: now,
+    threadId: threadTs,
+  };
+
+  getDBRequest("addToHistory", {
+    query,
+  });
+
   getDBRequest("updateThread", {
     query: { threadId: threadTs, active: true },
     data: {
