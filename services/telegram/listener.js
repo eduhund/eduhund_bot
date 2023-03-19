@@ -29,6 +29,12 @@ function telegramListenerRun() {
     processContext(context, { telegramUser });
   });
 
+  bot.command("help", async (ctx) => {
+    const telegramUser = ctx.message.from;
+    const context = "tHelp";
+    processContext(context, { telegramUser });
+  });
+
   bot.on("message", async (ctx) => {
     const text = ctx.message.text || ctx.message.caption;
     const telegramUserId = ctx.message.from.id;
