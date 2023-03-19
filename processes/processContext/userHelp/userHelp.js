@@ -10,12 +10,15 @@ async function userHelp({ telegramUser }) {
       intent: "help",
       lang: "ru",
     });
-    /*
-    getDBRequest("updateUserInfo", {
-      query: { userId: telegramUser?.id },
-      data: { blocked: false },
+
+    getDBRequest("addAction", {
+      query: {
+        userId: telegramUser?.id,
+        role: "student",
+        actionCode: 002,
+        action: "Request help",
+      },
     });
-    */
   }
 
   return true;

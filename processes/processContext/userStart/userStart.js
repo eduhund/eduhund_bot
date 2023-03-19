@@ -45,6 +45,15 @@ async function userStart({ telegramUser }) {
     });
   }
 
+  getDBRequest("addAction", {
+    query: {
+      userId: telegramUser?.id,
+      role: "student",
+      actionCode: 001,
+      action: "Start bot",
+    },
+  });
+
   return true;
 }
 

@@ -6,6 +6,7 @@ const { getThread } = require("./getThread/getThread");
 const { updateThread } = require("./updateThread/updateThread");
 const { addToHistory } = require("./addToHistory/addToHistory");
 const { addUser } = require("./addUser/addUser");
+const { addAction } = require("./addAction/addAction");
 
 const REQUESTS = {
   getUserInfo,
@@ -16,6 +17,7 @@ const REQUESTS = {
   updateUserInfo,
   addToHistory,
   addUser,
+  addAction,
 };
 
 function getDBRequest(type, params) {
