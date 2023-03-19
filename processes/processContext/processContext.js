@@ -1,21 +1,15 @@
+const userStart = require("./userStart/userStart");
 const forwardMessageToSlack = require("./forwardMessageToSlack/forwardMessageToSlack");
 const answerToStudent = require("./answerToStudent/answerToStudent");
 
-function processContext(
-  context,
-  { telegramUserId, text, att, slackUserId, threadTs }
-) {
+function processContext(context, data) {
   switch (context) {
+    case "tStart":
+      return userStart(data);
     case "tManual":
-      return forwardMessageToSlack({ telegramUserId, text, att });
+      return forwardMessageToSlack(data);
     case "sAnswer":
-      return answerToStudent({
-        telegramUserId,
-        slackUserId,
-        text,
-        att,
-        threadTs,
-      });
+      return answerToStudent(data);
   }
 }
 

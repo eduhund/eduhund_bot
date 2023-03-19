@@ -23,10 +23,15 @@ function getContext(message) {
 }
 
 function telegramListenerRun() {
+  bot.command("start", async (ctx) => {
+    const telegramUser = ctx.message.from;
+    const context = "tStart";
+    processContext(context, { telegramUser });
+  });
+
   bot.on("message", async (ctx) => {
     const text = ctx.message.text || ctx.message.caption;
     const telegramUserId = ctx.message.from.id;
-    const ts = ctx.message.date;
     const image = ctx.message.photo || ctx.message.sticker;
     const document = ctx.message.document;
     const video = ctx.message.video || ctx.message.video_note;
