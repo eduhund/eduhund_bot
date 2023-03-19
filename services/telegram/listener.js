@@ -40,7 +40,7 @@ function telegramListenerRun() {
       document: docUrl || videoUrl || audioUrl,
     };
     const context = getContext(text);
-    processContext(context, { telegramUserId, text, att, ts });
+    processContext(context, { telegramUserId, text, att });
   });
 
   //Not supported yet

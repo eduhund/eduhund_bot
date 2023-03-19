@@ -3,18 +3,17 @@ const answerToStudent = require("./answerToStudent/answerToStudent");
 
 function processContext(
   context,
-  { telegramUserId, text, att, ts, slackUserId, threadTs }
+  { telegramUserId, text, att, slackUserId, threadTs }
 ) {
   switch (context) {
     case "tManual":
-      return forwardMessageToSlack({ telegramUserId, text, att, ts });
+      return forwardMessageToSlack({ telegramUserId, text, att });
     case "sAnswer":
       return answerToStudent({
         telegramUserId,
         slackUserId,
         text,
         att,
-        ts,
         threadTs,
       });
   }

@@ -2,7 +2,7 @@ const { getDBRequest } = require("@mg/requests");
 const { sendMessageToSlack } = require("@sl/actions/actions");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-async function forwardMessageToSlack({ telegramUserId, text, att, ts }) {
+async function forwardMessageToSlack({ telegramUserId, text, att }) {
   const now = Date.now();
   const user = await getDBRequest("getUserInfo", {
     query: { userId: telegramUserId },
