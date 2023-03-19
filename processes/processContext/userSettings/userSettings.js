@@ -7,7 +7,7 @@ async function userHelp({ telegramUser }) {
   if (telegramUser) {
     sendMessageToTelegram({
       telegramUserId: telegramUser?.id,
-      intent: "help",
+      intent: "settings",
       lang: "ru",
     });
 
@@ -15,8 +15,8 @@ async function userHelp({ telegramUser }) {
       query: {
         userId: telegramUser?.id,
         role: "student",
-        actionCode: 002,
-        action: "Request help",
+        actionCode: 003,
+        action: "Request settings",
         ts: now,
       },
     });

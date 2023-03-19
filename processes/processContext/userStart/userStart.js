@@ -51,6 +51,7 @@ async function userStart({ telegramUser }) {
       role: "student",
       actionCode: 001,
       action: "Start bot",
+      ts: now,
     },
   });
 

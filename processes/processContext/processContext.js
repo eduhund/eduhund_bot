@@ -1,5 +1,6 @@
 const userStart = require("./userStart/userStart");
 const userHelp = require("./userHelp/userHelp");
+const userSettings = require("./userSettings/userSettings");
 const forwardMessageToSlack = require("./forwardMessageToSlack/forwardMessageToSlack");
 const answerToStudent = require("./answerToStudent/answerToStudent");
 
@@ -9,6 +10,8 @@ function processContext(context, data) {
       return userStart(data);
     case "tHelp":
       return userHelp(data);
+    case "tSettings":
+      return userSettings(data);
     case "tManual":
       return forwardMessageToSlack(data);
     case "sAnswer":
