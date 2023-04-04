@@ -1,5 +1,6 @@
 const userStart = require("./userStart/userStart");
 const userHelp = require("./userHelp/userHelp");
+const userPet = require("./userPet/userPet");
 const userSettings = require("./userSettings/userSettings");
 const userChangeEmail = require("./userChangeEmail/userChangeEmail");
 const userCancel = require("./userCancel/userCancel");
@@ -7,23 +8,25 @@ const forwardMessageToSlack = require("./forwardMessageToSlack/forwardMessageToS
 const answerToStudent = require("./answerToStudent/answerToStudent");
 
 function processContext(context, data) {
-  switch (context) {
-    case "tStart":
-      return userStart(data);
-    case "tHelp":
-      return userHelp(data);
-    case "tSettings":
-      return userSettings(data);
-    case "tChangeEmail":
-    case "tChangeEmailButton":
-      return userChangeEmail(data);
-    case "tCancelButton":
-      return userCancel(data);
-    case "tManual":
-      return forwardMessageToSlack(data);
-    case "sAnswer":
-      return answerToStudent(data);
-  }
+	switch (context) {
+		case "tStart":
+			return userStart(data);
+		case "tHelp":
+			return userHelp(data);
+		case "tSettings":
+			return userSettings(data);
+		case "tChangeEmail":
+		case "tChangeEmailButton":
+			return userChangeEmail(data);
+		case "tCancelButton":
+			return userCancel(data);
+		case "tMeow":
+			return userPet(data);
+		case "tManual":
+			return forwardMessageToSlack(data);
+		case "sAnswer":
+			return answerToStudent(data);
+	}
 }
 
 module.exports = processContext;

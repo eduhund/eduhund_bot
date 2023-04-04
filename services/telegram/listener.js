@@ -3,7 +3,7 @@ const processContext = require("@processes/processContext/processContext");
 const { getTelegramFileUrl } = require("@utils/getFileUrl");
 
 function getContext(message, botContext) {
-	const msg = String.prototype.toLowerCase(message);
+	const msg = message.toLowerCase();
 	if (botContext) {
 		switch (botContext) {
 			case "changeEmail":
