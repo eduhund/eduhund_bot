@@ -9,6 +9,17 @@ async function sendMessageToTelegram({ telegramUserId, intent, lang, data }) {
 	if (replies) {
 		options.reply_markup = replies;
 	}
+	if (intent.startsWith("start")) {
+		options.reply_markup = {
+			keyboard: [
+				[{ text: "• погладить котика •" }],
+				[{ text: "• узнать про другие задачники •" }],
+				[{ text: "• забрать сертификат •" }],
+			],
+			is_persistent: true,
+			resize_keyboard: true,
+		};
+	}
 	await bot.telegram.sendMessage(telegramUserId, text, options);
 }
 
