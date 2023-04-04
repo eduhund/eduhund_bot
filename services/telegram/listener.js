@@ -14,7 +14,7 @@ function getContext(message, botContext) {
 		return "tMeow";
 	}
 	if (msg === "• узнать про другие задачники •") {
-		return "tGetInfoAboutModules";
+		return "tOtherModules";
 	}
 	if (msg === "• сменить email •") {
 		return "tChangeMail";

@@ -57,6 +57,18 @@ const KEYBOARDS = {
 			],
 		};
 	},
+	otherModules({ lang }) {
+		return {
+			inline_keyboard: [
+				[
+					{
+						text: getPhrase(lang, "otherModulesButton"),
+						url: "https://www.eduhund.ru/?utm_source=telegram&utm_medium=social&utm_campaign=bot_eduhund",
+					},
+				],
+			],
+		};
+	},
 };
 
 function getKeyboard(lang, intent, data) {
