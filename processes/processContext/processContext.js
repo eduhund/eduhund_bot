@@ -4,6 +4,7 @@ const userPet = require("./userPet/userPet");
 const userSettings = require("./userSettings/userSettings");
 const userChangeEmail = require("./userChangeEmail/userChangeEmail");
 const userCancel = require("./userCancel/userCancel");
+const userGetLogic = require("./userGetLogic/userGetLogic");
 const otherModules = require("./otherModules/otherModules");
 const forwardMessageToSlack = require("./forwardMessageToSlack/forwardMessageToSlack");
 const answerToStudent = require("./answerToStudent/answerToStudent");
@@ -23,6 +24,8 @@ function processContext(context, data) {
 			return userCancel(data);
 		case "tOtherModules":
 			return otherModules(data);
+		case "tGetLogicModule":
+			return userGetLogic(data);
 		case "tMeow":
 			return userPet(data);
 		case "tManual":

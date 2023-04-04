@@ -2,10 +2,18 @@ const { getPhrase } = require("@assets/dict/dict");
 const { getKeyboard } = require("@utils/telegramReplyFabric");
 const { bot } = require("@tg/telegram");
 
-async function sendMessageToTelegram({ telegramUserId, intent, lang, data }) {
+async function sendMessageToTelegram({
+	telegramUserId,
+	intent,
+	lang,
+	data,
+	params = {},
+}) {
 	const text = getPhrase(lang, intent, data);
 	const replies = getKeyboard(lang, intent, data);
-	const options = {};
+	const options = {
+		disable_web_page_preview: params.noLink,
+	};
 	if (replies) {
 		options.reply_markup = replies;
 	}
