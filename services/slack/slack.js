@@ -1,10 +1,12 @@
+const { log } = require("../../services/log");
+
 const { App } = require("@slack/bolt");
 const { WebClient } = require("@slack/web-api");
 
 // Read a token from the environment variables
 const token = process.env.SLACK_TOKEN;
 const secret = process.env.SLACK_SECRET;
-const port = process.env.SLACK_PORT;
+const port = process.env.SLACK_PORT || 8001;
 
 // Initialize
 const web = new WebClient(token);
@@ -18,7 +20,7 @@ const slack = new App({
 
 async function start() {
 	await slack.start(port);
-	console.log("Slack listener ready on port", port);
+	log.info("Slack listener ready on port", port);
 }
 
 module.exports.start = start;

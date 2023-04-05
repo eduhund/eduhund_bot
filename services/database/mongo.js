@@ -1,19 +1,29 @@
+const { log } = require("../../services/log");
+
 const { MongoClient } = require("mongodb");
 
-const mongoClient = new MongoClient(process.env.MONGO_URL);
-mongoClient.connect();
+const mongo = new MongoClient(process.env.MONGO_URL);
 
-const USERS = mongoClient.db(process.env.BOT_DATABASE).collection("users");
-const THREADS = mongoClient.db(process.env.BOT_DATABASE).collection("threads");
-const HISTORY = mongoClient.db(process.env.BOT_DATABASE).collection("history");
-const ACTIONS = mongoClient.db(process.env.BOT_DATABASE).collection("actions");
+const USERS = mongo.db(process.env.BOT_DATABASE).collection("users");
+const THREADS = mongo.db(process.env.BOT_DATABASE).collection("threads");
+const HISTORY = mongo.db(process.env.BOT_DATABASE).collection("history");
+const ACTIONS = mongo.db(process.env.BOT_DATABASE).collection("actions");
 
-const STUDENTS = mongoClient
-	.db(process.env.PLATFORM_DATABASE)
-	.collection("users");
+const STUDENTS = mongo.db(process.env.PLATFORM_DATABASE).collection("users");
 
-const MODULES = mongoClient
-	.db(process.env.PLATFORM_DATABASE)
-	.collection("modules");
+const MODULES = mongo.db(process.env.PLATFORM_DATABASE).collection("modules");
 
-module.exports = { USERS, THREADS, HISTORY, ACTIONS, STUDENTS, MODULES };
+async function connect() {
+	await mongo.connect();
+	log.info("Connected to mongoDB server");
+}
+
+module.exports = {
+	connect,
+	USERS,
+	THREADS,
+	HISTORY,
+	ACTIONS,
+	STUDENTS,
+	MODULES,
+};

@@ -1,4 +1,5 @@
-require("dotenv").config();
+const { log } = require("../../services/log");
+
 const { Telegraf, session } = require("telegraf");
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
@@ -6,7 +7,7 @@ const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 function start() {
 	bot.use(session());
 	bot.launch();
-	console.log("Telegram is working");
+	log.info("Telegram started successful");
 }
 
 module.exports.start = start;

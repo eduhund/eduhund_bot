@@ -1,7 +1,9 @@
+const { log } = require("../../services/log");
+
 const express = require("express");
 const server = express();
 
-const port = process.env.SERVER_PORT;
+const port = process.env.SERVER_PORT || 8000;
 
 function start() {
 	return new Promise((resolve, reject) => {
@@ -9,7 +11,7 @@ function start() {
 			if (err) {
 				return reject(err);
 			}
-			console.log("Server starts on port", port);
+			log.info("Server starts on port", port);
 			return resolve();
 		});
 	});
