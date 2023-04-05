@@ -16,10 +16,10 @@ function getContext(message) {
 
 function slackListenerRun() {
 	listener.message(async ({ message }) => {
-		const text = message.text;
-		const threadTs = message.thread_ts;
-		const slackUserId = message.user;
-		const att = await filesPrepare(message.files);
+		const slackUserId = message?.user;
+		const text = message?.text;
+		const threadTs = message?.thread_ts;
+		const att = await filesPrepare(message?.files);
 		const context = getContext(message);
 		processContext(context, { slackUserId, text, threadTs, att });
 	});
