@@ -9,7 +9,7 @@ const { web } = require("@sl/slack");
 async function sendMessageToSlack({ type, user, text, threadId, att, data }) {
 	switch (type) {
 		case "broadcastSuccess":
-			web.chat.postMessage(broadcastSuccess({ text, data }));
+			web.chat.postMessage(broadcastSuccess({ text, user, data }));
 			break;
 		default:
 			if (!threadId) {

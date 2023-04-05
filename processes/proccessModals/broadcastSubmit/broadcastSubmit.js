@@ -3,10 +3,11 @@ const { sendMessageToSlack } = require("@sl/actions/actions");
 const { forwardMessageToTelegram } = require("@tg/actions/actions");
 
 async function broadcastSubmit({ view, user }) {
+	const now = Date.now();
+
 	const modules = view.state.values.modules.modulesList.selected_options;
 	const moduleIds = modules.map((moduleItem) => moduleItem.value);
 	const text = view.state.values.message.text.value || "";
-	const author = user.name;
 
 	const users = [];
 
@@ -42,16 +43,19 @@ async function broadcastSubmit({ view, user }) {
 	sendMessageToSlack({
 		type: "broadcastSuccess",
 		text,
-		data: { counter, author },
+		user,
+		data: { counter },
 	});
 
-	/*
-	return sendMessageToSlack({
-		trigger,
-		type: "broadcast",
-		data: { modules: data },
+	getDBRequest("addAction", {
+		query: {
+			userId: user.id,
+			role: "teacher",
+			actionCode: 10,
+			action: "Send message to many users",
+			ts: now,
+		},
 	});
-  */
 }
 
 module.exports = { broadcastSubmit };
