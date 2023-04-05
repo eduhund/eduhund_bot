@@ -10,15 +10,15 @@ const port = process.env.SLACK_PORT;
 const web = new WebClient(token);
 
 const slack = new App({
-  signingSecret: secret,
-  token: token,
-  socketMode: true,
-  appToken: process.env.SLACK_APP_TOKEN,
+	signingSecret: secret,
+	token: token,
+	socketMode: true,
+	appToken: process.env.SLACK_APP_TOKEN,
 });
 
 async function start() {
-  await slack.start(port);
-  console.log("Slack listener ready on port", port);
+	await slack.start(port);
+	console.log("Slack listener ready on port", port);
 }
 
 module.exports.start = start;

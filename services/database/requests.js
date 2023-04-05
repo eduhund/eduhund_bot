@@ -7,21 +7,25 @@ const { updateThread } = require("./updateThread/updateThread");
 const { addToHistory } = require("./addToHistory/addToHistory");
 const { addUser } = require("./addUser/addUser");
 const { addAction } = require("./addAction/addAction");
+const { getModulesList } = require("./getModulesList/getModulesList");
+const { getStudentsList } = require("./getStudentsList/getStudentsList");
 
 const REQUESTS = {
-  getUserInfo,
-  getStudentInfo,
-  createThread,
-  getThread,
-  updateThread,
-  updateUserInfo,
-  addToHistory,
-  addUser,
-  addAction,
+	getUserInfo,
+	getStudentInfo,
+	createThread,
+	getThread,
+	updateThread,
+	updateUserInfo,
+	addToHistory,
+	addUser,
+	addAction,
+	getModulesList,
+	getStudentsList,
 };
 
 function getDBRequest(type, params) {
-  return REQUESTS[type](params);
+	return REQUESTS[type](params);
 }
 
 module.exports.getDBRequest = getDBRequest;

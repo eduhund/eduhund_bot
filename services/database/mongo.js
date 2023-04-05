@@ -9,7 +9,11 @@ const HISTORY = mongoClient.db(process.env.BOT_DATABASE).collection("history");
 const ACTIONS = mongoClient.db(process.env.BOT_DATABASE).collection("actions");
 
 const STUDENTS = mongoClient
-  .db(process.env.PLATFORM_DATABASE)
-  .collection("users");
+	.db(process.env.PLATFORM_DATABASE)
+	.collection("users");
 
-module.exports = { USERS, THREADS, HISTORY, ACTIONS, STUDENTS };
+const MODULES = mongoClient
+	.db(process.env.PLATFORM_DATABASE)
+	.collection("modules");
+
+module.exports = { USERS, THREADS, HISTORY, ACTIONS, STUDENTS, MODULES };

@@ -1,6 +1,7 @@
 const { listener } = require("./slack");
 const processContext = require("@processes/processContext/processContext");
 const { filesPrepare } = require("@utils/filesPrepare");
+const processModals = require("../../processes/proccessModals/processModals");
 
 function getContext(message) {
 	if (
@@ -23,12 +24,18 @@ function slackListenerRun() {
 		processContext(context, { slackUserId, text, threadTs, att });
 	});
 
-	listener.command("/broadcast", () => {
-		console.log("Hi");
+	listener.command("/broadcast", async ({ payload, ack }) => {
+		await processModals("sBroadcastModal", { trigger: payload.trigger_id });
+		ack();
 	});
 
 	listener.command("/new_dm", () => {
 		console.log("Hi");
+	});
+
+	listener.view("broadcastSubmit", async ({ view, body, ack }) => {
+		await processModals("sBroadcastSubmit", { view, user: body.user });
+		ack();
 	});
 }
 
