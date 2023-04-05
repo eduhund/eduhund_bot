@@ -29,8 +29,9 @@ function slackListenerRun() {
 		ack();
 	});
 
-	listener.command("/new_dm", () => {
-		console.log("Hi");
+	listener.command("/newdm", async ({ payload, ack }) => {
+		await processModals("sDmModal", { trigger: payload.trigger_id });
+		ack();
 	});
 
 	listener.view("broadcastSubmit", async ({ view, body, ack }) => {
