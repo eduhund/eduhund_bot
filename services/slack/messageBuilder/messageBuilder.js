@@ -3,6 +3,7 @@ const threadMessage = require("./threadMessage/threadMessage");
 const broadcastModal = require("./broadcastModal/broadcastModal");
 const broadcastSuccess = require("./broadcastSuccess/broadcastSuccess");
 const dmModal = require("./dmModal/dmModal");
+const dmSuccess = require("./dmSuccess/dmSuccess");
 
 const slackMessages = {
 	mainMessage,
@@ -10,6 +11,7 @@ const slackMessages = {
 	broadcastModal,
 	broadcastSuccess,
 	dmModal,
+	dmSuccess,
 };
 
 module.exports = slackMessages;

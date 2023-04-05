@@ -38,6 +38,11 @@ function slackListenerRun() {
 		await processModals("sBroadcastSubmit", { view, user: body.user });
 		ack();
 	});
+
+	listener.view("newDmSubmit", async ({ view, body, ack }) => {
+		await processModals("sDmSubmit", { view, user: body.user });
+		ack();
+	});
 }
 
 module.exports.slackListenerRun = slackListenerRun;
