@@ -1,5 +1,6 @@
 const { getDBRequest } = require("@mg/requests");
 const { sendMessageToSlack } = require("@sl/actions/actions");
+const { forwardMessageToTelegram } = require("@tg/actions/actions");
 
 async function broadcastSubmit({ view, user }) {
 	const modules = view.state.values.modules.modulesList.selected_options;
@@ -22,7 +23,21 @@ async function broadcastSubmit({ view, user }) {
 
 	const finalList = [...new Set(users)];
 
-	const counter = finalList.length;
+	let counter = 0;
+
+	for (const email of finalList) {
+		const query = { email };
+		const data = await getDBRequest("getUserInfo", {
+			query,
+			returns: ["userId"],
+		});
+
+		if (data) {
+			const telegramUserId = data.userId;
+			forwardMessageToTelegram({ telegramUserId, text });
+			counter++;
+		}
+	}
 
 	sendMessageToSlack({
 		type: "broadcastSuccess",
