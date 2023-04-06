@@ -1,9 +1,8 @@
 const { listener } = require("./slack");
 const { processContext } = require("@processes/processContext/processContext");
 const { filesPrepare } = require("@utils/filesPrepare");
-const {
-	processModals,
-} = require("../../processes/proccessModals/processModals");
+const { processModals } = require("@processes/proccessModals/processModals");
+const { processActions } = require("@processes/processActions/processActions");
 
 function getContext(message) {
 	if (
@@ -12,6 +11,13 @@ function getContext(message) {
 		message.thread_ts
 	) {
 		return "sAnswer";
+	}
+	return undefined;
+}
+
+function getActionContext({ type, reaction, item }) {
+	if (type === "reaction_added" && reaction === "o") {
+		return "sCloseThread";
 	}
 	return undefined;
 }
@@ -44,6 +50,14 @@ function slackListenerRun() {
 	listener.view("newDmSubmit", async ({ view, body, ack }) => {
 		await processModals("sDmSubmit", { view, user: body.user });
 		ack();
+	});
+
+	listener.event("reaction_added", async ({ event }) => {
+		const userId = event.user;
+		const channel = event.item.channel;
+		const ts = event.item.ts;
+		const actionContext = getActionContext(event);
+		await processActions(actionContext, { userId, channel, ts });
 	});
 }
 
