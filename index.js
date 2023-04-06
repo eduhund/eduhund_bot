@@ -1,6 +1,6 @@
 require("dotenv").config();
 require("module-alias/register");
-const { log } = require("./services/log");
+const { log } = require("./services/log/log");
 
 const bot = require("@tg/telegram");
 const slack = require("@sl/slack");
