@@ -1,4 +1,4 @@
-const { log } = require("../../services/log");
+const { log } = require("../../services/log/log");
 
 const { MongoClient } = require("mongodb");
 

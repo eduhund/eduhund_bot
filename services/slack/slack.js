@@ -1,4 +1,4 @@
-const { log } = require("../../services/log");
+const { log } = require("../../services/log/log");
 
 const { App } = require("@slack/bolt");
 const { WebClient } = require("@slack/web-api");

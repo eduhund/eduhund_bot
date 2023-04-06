@@ -1,4 +1,4 @@
-const { log } = require("../../services/log");
+const { log } = require("../../services/log/log");
 const express = require("express");
 
 // Read a server port from the environment variables

@@ -1,4 +1,4 @@
-const { log } = require("../../services/log");
+const { log } = require("../../services/log/log");
 const { broadcastModal } = require("./broadcastModal/broadcastModal");
 const { broadcastSubmit } = require("./broadcastSubmit/broadcastSubmit");
 const { dmModal } = require("./dmModal/dmModal");
