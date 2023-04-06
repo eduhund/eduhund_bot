@@ -22,4 +22,4 @@ function processModals(context, data) {
 	}
 }
 
-module.exports = processModals;
+module.exports = { processModals };

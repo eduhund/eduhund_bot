@@ -25,4 +25,4 @@ async function userPet({ telegramUser }) {
 	return { OK: true, newBotContext: undefined };
 }
 
-module.exports = userPet;
+module.exports = { userPet };

@@ -4,4 +4,4 @@ async function answerTelegramCallback({ callbackId }) {
 	await bot.telegram.answerCbQuery(callbackId);
 }
 
-module.exports = answerTelegramCallback;
+module.exports = { answerTelegramCallback };

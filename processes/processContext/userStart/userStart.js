@@ -59,4 +59,4 @@ async function userStart({ telegramUser }) {
 	return { OK: true, newBotContext: undefined };
 }
 
-module.exports = userStart;
+module.exports = { userStart };

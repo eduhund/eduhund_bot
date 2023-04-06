@@ -39,4 +39,4 @@ async function userGetLogic({ telegramUser }) {
 	return { OK: true, newBotContext: undefined };
 }
 
-module.exports = userGetLogic;
+module.exports = { userGetLogic };

@@ -1,5 +1,5 @@
 const { bot } = require("./telegram");
-const processContext = require("@processes/processContext/processContext");
+const { processContext } = require("@processes/processContext/processContext");
 const { getTelegramFileUrl } = require("@utils/getFileUrl");
 
 function getContext(message, botContext) {
@@ -94,4 +94,4 @@ function telegramListenerRun() {
 	bot.on("audio", async (ctx) => {});
 }
 
-module.exports.telegramListenerRun = telegramListenerRun;
+module.exports = { telegramListenerRun };

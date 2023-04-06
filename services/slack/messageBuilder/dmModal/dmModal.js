@@ -108,4 +108,4 @@ function dmModal({ trigger, users }) {
 	return message;
 }
 
-module.exports = dmModal;
+module.exports = { dmModal };

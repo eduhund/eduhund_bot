@@ -13,4 +13,4 @@ async function sendModal({ trigger, type, data }) {
 	}
 }
 
-module.exports = sendModal;
+module.exports = { sendModal };

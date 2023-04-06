@@ -28,4 +28,4 @@ function dmSuccess({ text, user, data }) {
 	return form;
 }
 
-module.exports = dmSuccess;
+module.exports = { dmSuccess };

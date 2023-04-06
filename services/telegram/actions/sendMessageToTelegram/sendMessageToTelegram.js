@@ -31,4 +31,4 @@ async function sendMessageToTelegram({
 	await bot.telegram.sendMessage(telegramUserId, text, options);
 }
 
-module.exports = sendMessageToTelegram;
+module.exports = { sendMessageToTelegram };

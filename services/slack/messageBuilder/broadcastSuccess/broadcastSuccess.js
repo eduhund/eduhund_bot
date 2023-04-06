@@ -26,4 +26,4 @@ function broadcastSuccess({ text, user, data }) {
 	return form;
 }
 
-module.exports = broadcastSuccess;
+module.exports = { broadcastSuccess };

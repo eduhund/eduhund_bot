@@ -21,4 +21,4 @@ async function userCancel({ telegramUser, messageId, callbackId }) {
 	return { OK: true, newBotContext: undefined };
 }
 
-module.exports = userCancel;
+module.exports = { userCancel };

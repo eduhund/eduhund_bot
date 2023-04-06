@@ -139,4 +139,4 @@ async function userChangeEmail({ telegramUser, text, botContext }) {
 	}
 }
 
-module.exports = userChangeEmail;
+module.exports = { userChangeEmail };

@@ -4,4 +4,4 @@ async function deleteTelegramMessage({ telegramUserId, messageId }) {
 	await bot.telegram.deleteMessage(telegramUserId, messageId);
 }
 
-module.exports = deleteTelegramMessage;
+module.exports = { deleteTelegramMessage };

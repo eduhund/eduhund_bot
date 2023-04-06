@@ -12,4 +12,4 @@ async function otherModules({ telegramUser }) {
 	return { OK: true, newBotContext: undefined };
 }
 
-module.exports = otherModules;
+module.exports = { otherModules };

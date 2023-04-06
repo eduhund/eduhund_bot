@@ -1,10 +1,13 @@
 const { log } = require("../../services/log");
-
 const express = require("express");
-const server = express();
 
+// Read a server port from the environment variables
 const port = process.env.SERVER_PORT || 8000;
 
+// Initialize
+const server = express();
+
+// Start function
 function start() {
 	return new Promise((resolve, reject) => {
 		server.listen(port, (err) => {
@@ -17,4 +20,4 @@ function start() {
 	});
 }
 
-module.exports.start = start;
+module.exports = { start };

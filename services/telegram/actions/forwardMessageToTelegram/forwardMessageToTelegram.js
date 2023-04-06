@@ -33,4 +33,4 @@ async function forwardMessageToTelegram({ telegramUserId, text, att = [] }) {
 	}
 }
 
-module.exports = forwardMessageToTelegram;
+module.exports = { forwardMessageToTelegram };

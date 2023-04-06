@@ -1,7 +1,9 @@
 const { listener } = require("./slack");
-const processContext = require("@processes/processContext/processContext");
+const { processContext } = require("@processes/processContext/processContext");
 const { filesPrepare } = require("@utils/filesPrepare");
-const processModals = require("../../processes/proccessModals/processModals");
+const {
+	processModals,
+} = require("../../processes/proccessModals/processModals");
 
 function getContext(message) {
 	if (
@@ -45,4 +47,4 @@ function slackListenerRun() {
 	});
 }
 
-module.exports.slackListenerRun = slackListenerRun;
+module.exports = { slackListenerRun };

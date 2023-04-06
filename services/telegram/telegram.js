@@ -2,13 +2,14 @@ const { log } = require("../../services/log");
 
 const { Telegraf, session } = require("telegraf");
 
+// Initialize
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
+// Start function
 function start() {
 	bot.use(session());
 	bot.launch();
 	log.info("Telegram started successful");
 }
 
-module.exports.start = start;
-module.exports.bot = bot;
+module.exports = { start, bot };

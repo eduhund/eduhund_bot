@@ -30,4 +30,4 @@ function getDBRequest(type, params) {
 	return REQUESTS[type](params);
 }
 
-module.exports.getDBRequest = getDBRequest;
+module.exports = { getDBRequest };

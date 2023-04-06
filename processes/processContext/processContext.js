@@ -1,15 +1,17 @@
 const { log } = require("../../services/log");
 
-const userStart = require("./userStart/userStart");
-const userHelp = require("./userHelp/userHelp");
-const userPet = require("./userPet/userPet");
-const userSettings = require("./userSettings/userSettings");
-const userChangeEmail = require("./userChangeEmail/userChangeEmail");
-const userCancel = require("./userCancel/userCancel");
-const userGetLogic = require("./userGetLogic/userGetLogic");
-const otherModules = require("./otherModules/otherModules");
-const forwardMessageToSlack = require("./forwardMessageToSlack/forwardMessageToSlack");
-const answerToStudent = require("./answerToStudent/answerToStudent");
+const { userStart } = require("./userStart/userStart");
+const { userHelp } = require("./userHelp/userHelp");
+const { userPet } = require("./userPet/userPet");
+const { userSettings } = require("./userSettings/userSettings");
+const { userChangeEmail } = require("./userChangeEmail/userChangeEmail");
+const { userCancel } = require("./userCancel/userCancel");
+const { userGetLogic } = require("./userGetLogic/userGetLogic");
+const { otherModules } = require("./otherModules/otherModules");
+const {
+	forwardMessageToSlack,
+} = require("./forwardMessageToSlack/forwardMessageToSlack");
+const { answerToStudent } = require("./answerToStudent/answerToStudent");
 
 function processContext(context, data) {
 	try {
@@ -42,4 +44,4 @@ function processContext(context, data) {
 	}
 }
 
-module.exports = processContext;
+module.exports = { processContext };

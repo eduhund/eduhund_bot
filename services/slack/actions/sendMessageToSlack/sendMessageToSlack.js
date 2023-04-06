@@ -30,4 +30,4 @@ async function sendMessageToSlack({ type, user, text, threadId, att, data }) {
 	}
 }
 
-module.exports = sendMessageToSlack;
+module.exports = { sendMessageToSlack };

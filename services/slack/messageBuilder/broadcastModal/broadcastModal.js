@@ -85,4 +85,4 @@ function broadcastModal({ trigger, modules }) {
 	return message;
 }
 
-module.exports = broadcastModal;
+module.exports = { broadcastModal };
