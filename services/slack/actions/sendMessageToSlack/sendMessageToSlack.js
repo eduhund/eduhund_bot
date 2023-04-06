@@ -4,6 +4,7 @@ const {
 	broadcastSuccess,
 	dmSuccess,
 	closeThreadManual,
+	reopenThreadManual,
 } = require("@sl/messageBuilder/messageBuilder");
 
 const { web } = require("@sl/slack");
@@ -18,6 +19,9 @@ async function sendMessageToSlack({ type, user, text, threadId, att, data }) {
 			break;
 		case "closeThreadManual":
 			web.chat.postMessage(closeThreadManual({ user, threadId }));
+			break;
+		case "reopenThreadManual":
+			web.chat.postMessage(reopenThreadManual({ user, threadId }));
 			break;
 		default:
 			if (!threadId) {

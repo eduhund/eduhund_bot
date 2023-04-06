@@ -19,6 +19,9 @@ function getActionContext({ type, reaction, item }) {
 	if (type === "reaction_added" && reaction === "o") {
 		return "sCloseThread";
 	}
+	if (type === "reaction_removed" && reaction === "o") {
+		return "sReopenThread";
+	}
 	return undefined;
 }
 
@@ -53,6 +56,14 @@ function slackListenerRun() {
 	});
 
 	listener.event("reaction_added", async ({ event }) => {
+		const userId = event.user;
+		const channel = event.item.channel;
+		const ts = event.item.ts;
+		const actionContext = getActionContext(event);
+		await processActions(actionContext, { userId, channel, ts });
+	});
+
+	listener.event("reaction_removed", async ({ event }) => {
 		const userId = event.user;
 		const channel = event.item.channel;
 		const ts = event.item.ts;
