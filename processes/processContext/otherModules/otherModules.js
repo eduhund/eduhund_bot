@@ -1,9 +1,9 @@
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-async function otherModules({ telegramUser }) {
-	if (telegramUser) {
+async function otherModules({ userId }) {
+	if (userId) {
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId,
 			intent: "otherModules",
 			lang: "ru",
 		});

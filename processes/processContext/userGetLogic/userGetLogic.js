@@ -2,13 +2,13 @@ const { getDBRequest } = require("@mg/requests");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 const { getLogicModule } = require("@utils/getLogicModule");
 
-async function userGetLogic({ telegramUser }) {
+async function userGetLogic({ userId }) {
 	const now = Date.now();
-	const url = await getLogicModule(telegramUser?.id);
+	const url = await getLogicModule(userId);
 
 	if (url) {
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId,
 			intent: "userLogicModule",
 			lang: "ru",
 			data: {
@@ -21,7 +21,7 @@ async function userGetLogic({ telegramUser }) {
 
 		getDBRequest("addAction", {
 			query: {
-				userId: telegramUser?.id,
+				userId,
 				role: "student",
 				actionCode: 9,
 				action: "Get logic",
@@ -30,7 +30,7 @@ async function userGetLogic({ telegramUser }) {
 		});
 	} else {
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId,
 			intent: "error",
 			lang: "ru",
 		});

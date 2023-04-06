@@ -1,4 +1,4 @@
-function closeThreadManual({ user, threadId }) {
+function closeThreadManual({ sUserId, threadId }) {
 	const form = {
 		channel: process.env.SLACK_CHANNEL,
 		text: "Тред закрыт",
@@ -9,7 +9,7 @@ function closeThreadManual({ user, threadId }) {
 				elements: [
 					{
 						type: "mrkdwn",
-						text: `*<@${user.id}> закрыл этот тред*`,
+						text: `*<@${sUserId}> закрыл этот тред*`,
 					},
 				],
 			},

@@ -9,31 +9,29 @@ const {
 
 const { web } = require("@sl/slack");
 
-async function sendMessageToSlack({ type, user, text, threadId, att, data }) {
-	switch (type) {
+async function sendMessageToSlack({ from, to, message }) {
+	switch (message.type) {
 		case "broadcastSuccess":
-			web.chat.postMessage(broadcastSuccess({ text, user, data }));
+			web.chat.postMessage(broadcastSuccess({ from, message, data }));
 			break;
 		case "dmSuccess":
-			web.chat.postMessage(dmSuccess({ text, user, data }));
+			web.chat.postMessage(dmSuccess({ from, message, data }));
 			break;
 		case "closeThreadManual":
-			web.chat.postMessage(closeThreadManual({ user, threadId }));
+			web.chat.postMessage(closeThreadManual({ from, to }));
 			break;
 		case "reopenThreadManual":
-			web.chat.postMessage(reopenThreadManual({ user, threadId }));
+			web.chat.postMessage(reopenThreadManual({ from, to }));
 			break;
 		default:
-			if (!threadId) {
+			if (!to.threadId) {
 				const response = await web.chat.postMessage(
-					mainMessage({ user, text, att })
+					mainMessage({ from, to, message })
 				);
 				return response?.ts;
 			} else {
-				await web.chat.postMessage(
-					threadMessage({ user, text, threadId, att })
-				);
-				return threadId;
+				await web.chat.postMessage(threadMessage({ from, to, message }));
+				return to.threadId;
 			}
 	}
 }

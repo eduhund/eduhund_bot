@@ -1,4 +1,4 @@
-function reopenThreadManual({ user, threadId }) {
+function reopenThreadManual({ sUserId, threadId }) {
 	const form = {
 		channel: process.env.SLACK_CHANNEL,
 		text: "Тред снова открыт",
@@ -9,7 +9,7 @@ function reopenThreadManual({ user, threadId }) {
 				elements: [
 					{
 						type: "mrkdwn",
-						text: `*<@${user.id}> снова открыл тред*`,
+						text: `*<@${sUserId}> снова открыл тред*`,
 					},
 				],
 			},

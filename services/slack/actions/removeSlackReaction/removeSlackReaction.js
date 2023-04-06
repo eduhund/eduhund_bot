@@ -7,9 +7,9 @@ function reactionContext(type) {
 	}
 }
 
-function removeSlackReaction({ channelId, type, threadId }) {
+function removeSlackReaction({ rChannelId, type, threadId }) {
 	web.reactions.remove({
-		channel: channelId,
+		channel: rChannelId,
 		name: reactionContext(type),
 		timestamp: threadId,
 	});

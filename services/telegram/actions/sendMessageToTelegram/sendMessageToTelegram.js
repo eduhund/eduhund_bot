@@ -2,13 +2,7 @@ const { getPhrase } = require("@assets/dict/dict");
 const { getKeyboard } = require("@utils/telegramReplyFabric");
 const { bot } = require("@tg/telegram");
 
-async function sendMessageToTelegram({
-	telegramUserId,
-	intent,
-	lang,
-	data,
-	params = {},
-}) {
+async function sendMessageToTelegram({ to, intent, lang, data, params = {} }) {
 	const text = getPhrase(lang, intent, data);
 	const replies = getKeyboard(lang, intent, data);
 	const options = {
@@ -28,7 +22,7 @@ async function sendMessageToTelegram({
 			resize_keyboard: true,
 		};
 	}
-	await bot.telegram.sendMessage(telegramUserId, text, options);
+	await bot.telegram.sendMessage(to.userId, text, options);
 }
 
 module.exports = { sendMessageToTelegram };

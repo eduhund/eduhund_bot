@@ -1,83 +1,107 @@
+const { log } = require("../../../services/log/log");
 const { getDBRequest } = require("@mg/requests");
 const { sendMessageToSlack } = require("@sl/actions/actions");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-async function forwardMessageToSlack({ telegramUser, text, att }) {
+async function forwardMessageToSlack({ from, message }) {
 	const now = Date.now();
-	const user = await getDBRequest("getUserInfo", {
-		query: { userId: telegramUser.id },
-	});
-	const thread = await getDBRequest("getThread", {
-		query: { userId: user?.userId, active: true },
-	});
-	const threadId = thread?.threadId;
-	const email = user.email;
-	var activeModules = [];
-	if (email) {
-		const userModules = await getDBRequest("getStudentInfo", {
-			query: { email },
-			returns: ["modules"],
+	try {
+		const user = await getDBRequest("getUserInfo", {
+			query: { userId: from.userId },
 		});
-		for (const [id, data] of Object.entries(userModules?.modules || {})) {
-			const deadline = Date.parse(data.deadline);
-			if (deadline > now) {
-				activeModules.push(id);
-			}
+
+		if (!user) {
+			log.warn("User not found in database.\n", from);
+			return;
 		}
-		user.modules = activeModules;
-	}
 
-	const responseTs = await sendMessageToSlack({ user, text, threadId, att });
+		const activeModules = [];
 
-	const query = {
-		userId: user.userId,
-		source: "telegram",
-		dest: "slack",
-		role: "student",
-		ts: now,
-		text,
-		threadId: responseTs,
-	};
+		if (user.email) {
+			from.email = user.email;
+			const userModules = await getDBRequest("getStudentInfo", {
+				query: { email: user.email },
+				returns: ["modules"],
+			});
+			for (const [id, data] of Object.entries(userModules?.modules || {})) {
+				const deadline = Date.parse(data.deadline);
+				if (deadline > now) {
+					activeModules.push(id);
+				}
+			}
+			from.modules = activeModules;
+		}
 
-	getDBRequest("addToHistory", {
-		query,
-	});
-
-	if (!threadId) {
-		const query = {
-			userId: user.userId,
-			source: "telegram",
-			dest: "slack",
-			role: "student",
-			ts: now,
-			text,
-			threadId: responseTs,
-			active: true,
-			talk: [],
-			lastIncMessage: now,
-		};
-		getDBRequest("createThread", {
-			query,
+		const thread = await getDBRequest("getThread", {
+			query: { userId: from.userId, active: true },
 		});
-		sendMessageToTelegram({ telegramUser, intent: "newThread", lang: "ru" });
-	} else {
-		getDBRequest("updateThread", {
-			query: { threadId: threadId, active: true },
-			data: {
-				lastOutMessage: now,
-				newMessage: {
-					userId: telegramUser.id,
+
+		const to = {
+			channelId: process.env.SLACK_CHANNEL,
+			threadId: thread?.threadId,
+		};
+
+		const threadId = await sendMessageToSlack({
+			from,
+			to,
+			message,
+		});
+
+		if (!to.threadId) {
+			getDBRequest("createThread", {
+				query: {
+					userId: from.userId,
 					source: "telegram",
 					dest: "slack",
 					role: "student",
-					text,
 					ts: now,
+					text: message.text,
+					threadId,
+					active: true,
+					talk: [],
+					lastIncMessage: now,
 				},
-			},
-		});
-	}
+			});
 
-	return { OK: true, newBotContext: undefined };
+			sendMessageToTelegram({
+				to: from,
+				intent: "newThread",
+				lang: "ru", //from.lang
+			});
+		} else {
+			getDBRequest("updateThread", {
+				query: { threadId, active: true },
+				data: {
+					lastOutMessage: now,
+					newMessage: {
+						userId: from.userId,
+						source: "telegram",
+						dest: "slack",
+						role: "student",
+						text: message.text,
+						ts: now,
+					},
+				},
+			});
+
+			getDBRequest("addToHistory", {
+				query: {
+					userId: from.userId,
+					source: "telegram",
+					dest: "slack",
+					role: "student",
+					ts: now,
+					text: message.text,
+					threadId,
+				},
+			});
+		}
+
+		return { OK: true, newBotContext: undefined };
+	} catch (e) {
+		log.warn("Error with processing forward user message to Slack.\n", e);
+		return { OK: false, newBotContext: undefined };
+	}
 }
 
 module.exports = { forwardMessageToSlack };

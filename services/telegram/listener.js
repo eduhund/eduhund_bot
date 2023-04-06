@@ -1,97 +1,41 @@
 const { bot } = require("./telegram");
 const { processContext } = require("@processes/processContext/processContext");
-const { getTelegramFileUrl } = require("@utils/getFileUrl");
-
-function getContext(message, botContext) {
-	const msg = message.toLowerCase();
-	if (botContext) {
-		switch (botContext) {
-			case "changeEmail":
-				return "tChangeEmail";
-		}
-	}
-	if (msg === "• погладить котика •") {
-		return "tMeow";
-	}
-	if (msg === "• узнать про другие задачники •") {
-		return "tOtherModules";
-	}
-	if (msg === "• сменить email •") {
-		return "tChangeMail";
-	}
-	if (msg === "• забрать сертификат •") {
-		return "tGetDiploma";
-	}
-	if (msg.includes("задачник по логике")) {
-		return "tGetLogicModule";
-	}
-	return "tManual";
-}
+const { incomingData } = require("./dataProcessor");
+const { getTelegramContext } = require("../../utils/getContext");
 
 function telegramListenerRun() {
 	bot.command("start", async (ctx) => {
-		const telegramUser = ctx.message.from;
+		const data = await incomingData(ctx.message);
 		const context = "tStart";
-		processContext(context, { telegramUser });
+		processContext(context, data);
 	});
 
 	bot.command("help", async (ctx) => {
-		const telegramUser = ctx.message.from;
+		const data = await incomingData(ctx.message);
 		const context = "tHelp";
-		processContext(context, { telegramUser });
+		processContext(context, data);
 	});
 
 	bot.command("settings", async (ctx) => {
-		const telegramUser = ctx.message.from;
+		const data = await incomingData(ctx.message);
 		const context = "tSettings";
-		processContext(context, { telegramUser });
+		processContext(context, data);
 	});
 
 	bot.on("callback_query", async (ctx) => {
-		const telegramUser = ctx.callbackQuery.from;
-		const messageId = ctx.callbackQuery.message.message_id;
-		const callbackId = ctx.callbackQuery.id;
+		const data = await incomingData(ctx.callbackQuery);
 		const context = ctx.callbackQuery.data;
-		const botContext = ctx.session;
-		const response = await processContext(context, {
-			telegramUser,
-			messageId,
-			callbackId,
-			botContext,
-		});
+		const response = await processContext(context, data);
 		ctx.session = response?.newBotContext;
 	});
 
 	bot.on("message", async (ctx) => {
+		const data = await incomingData(ctx.message);
 		const botContext = ctx.session;
-		const text = ctx.message.text || ctx.message.caption;
-		const telegramUser = ctx.message.from;
-		const image = ctx.message.photo || ctx.message.sticker;
-		const document = ctx.message.document;
-		const video = ctx.message.video || ctx.message.video_note;
-		const audio = ctx.message.audio || ctx.message.voice;
-		const imageUrl = image ? await getTelegramFileUrl(image) : undefined;
-		const docUrl = document ? await getTelegramFileUrl(document) : undefined;
-		const videoUrl = video ? await getTelegramFileUrl(video) : undefined;
-		const audioUrl = audio ? await getTelegramFileUrl(audio) : undefined;
-		const att = {
-			image: imageUrl,
-			document: docUrl || videoUrl || audioUrl,
-		};
-		const context = getContext(text, botContext);
-		const response = await processContext(context, {
-			telegramUser,
-			text,
-			att,
-			botContext,
-		});
+		const context = getTelegramContext(data.message?.text, botContext);
+		const response = await processContext(context, data);
 		ctx.session = response?.newBotContext;
 	});
-
-	//Not supported yet
-	bot.on("edited_message", async (ctx) => {});
-	bot.on("video", async (ctx) => {});
-	bot.on("audio", async (ctx) => {});
 }
 
 module.exports = { telegramListenerRun };

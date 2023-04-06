@@ -10,19 +10,19 @@ function getEmail(text) {
 	}
 }
 
-async function changeEmailInit({ telegramUser }) {
+async function changeEmailInit({ userId }) {
 	const now = Date.now();
 
-	if (telegramUser) {
+	if (userId) {
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId,
 			intent: "changeEmailInit",
 			lang: "ru",
 		});
 
 		getDBRequest("addAction", {
 			query: {
-				userId: telegramUser?.id,
+				userId,
 				role: "student",
 				actionCode: 004,
 				action: "Change email request",
@@ -34,13 +34,13 @@ async function changeEmailInit({ telegramUser }) {
 	return { OK: true, newBotContext: "changeEmail" };
 }
 
-async function changeEmailFail({ telegramUser }) {
+async function changeEmailFail({ userId }) {
 	const now = Date.now();
 
-	if (telegramUser) {
+	if (userId) {
 		getDBRequest("addAction", {
 			query: {
-				userId: telegramUser?.id,
+				userId,
 				role: "student",
 				actionCode: 005,
 				action: "Change email fail",
@@ -49,7 +49,7 @@ async function changeEmailFail({ telegramUser }) {
 		});
 
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId,
 			intent: "changeEmailFail",
 			lang: "ru",
 		});
@@ -58,19 +58,19 @@ async function changeEmailFail({ telegramUser }) {
 	return { OK: true, newBotContext: "changeEmail" };
 }
 
-async function changeEmailError({ telegramUser }) {
+async function changeEmailError({ userId }) {
 	const now = Date.now();
 
-	if (telegramUser) {
+	if (userId) {
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId,
 			intent: "changeEmailError",
 			lang: "ru",
 		});
 
 		getDBRequest("addAction", {
 			query: {
-				userId: telegramUser?.id,
+				userId,
 				role: "student",
 				actionCode: 005,
 				action: "Change email fail",
@@ -82,13 +82,13 @@ async function changeEmailError({ telegramUser }) {
 	return { OK: true, newBotContext: "changeEmail" };
 }
 
-async function changeEmailSuccess({ telegramUser, email }) {
+async function changeEmailSuccess({ userId, email }) {
 	const now = Date.now();
 
-	if (telegramUser) {
+	if (userId) {
 		getDBRequest("addAction", {
 			query: {
-				userId: telegramUser?.id,
+				userId,
 				role: "student",
 				actionCode: 006,
 				action: "Change email success",
@@ -98,13 +98,13 @@ async function changeEmailSuccess({ telegramUser, email }) {
 
 		getDBRequest("updateUserInfo", {
 			query: {
-				userId: telegramUser?.id,
+				userId,
 			},
 			data: { email },
 		});
 
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId,
 			intent: "changeEmailSuccess",
 			lang: "ru",
 		});
@@ -113,14 +113,14 @@ async function changeEmailSuccess({ telegramUser, email }) {
 	return { OK: true, newBotContext: undefined };
 }
 
-async function userChangeEmail({ telegramUser, text, botContext }) {
+async function userChangeEmail({ userId, text, botContext }) {
 	const now = Date.now();
 	const user = await getDBRequest("getUserInfo", {
-		query: { userId: telegramUser.id },
+		query: { userId },
 	});
 
 	if (!botContext) {
-		return changeEmailInit({ telegramUser });
+		return changeEmailInit({ userId });
 	}
 
 	const currentEmail = user?.email;
@@ -130,12 +130,12 @@ async function userChangeEmail({ telegramUser, text, botContext }) {
 			query: { email: extrudedEmail },
 		});
 		if (student) {
-			return changeEmailSuccess({ telegramUser, email: extrudedEmail });
+			return changeEmailSuccess({ userId, email: extrudedEmail });
 		} else {
-			return changeEmailFail({ telegramUser });
+			return changeEmailFail({ userId });
 		}
 	} else {
-		return changeEmailError({ telegramUser });
+		return changeEmailError({ userId });
 	}
 }
 

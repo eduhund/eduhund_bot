@@ -7,7 +7,7 @@ function sliceIntoChunks(arr, chunkSize) {
 	return res;
 }
 
-function dmModal({ trigger, users }) {
+function dmModal({ sTriggerId, users }) {
 	const options = [];
 	for (const user of users) {
 		if (user.email && user.userId) {
@@ -101,7 +101,7 @@ function dmModal({ trigger, users }) {
 	};
 
 	const message = {
-		trigger_id: trigger,
+		trigger_id: sTriggerId,
 		view: { ...modal },
 	};
 

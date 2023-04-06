@@ -2,23 +2,23 @@ const { getDBRequest } = require("@mg/requests");
 const { processActions } = require("../../processActions/processActions");
 const { forwardMessageToTelegram } = require("@tg/actions/actions");
 
-async function answerToStudent({ slackUserId, threadTs, text, att }) {
+async function answerToStudent({ sUserId, threadId, sMessage, sAtt }) {
 	const now = Date.now();
 	const thread = await getDBRequest("getThread", {
-		query: { threadId: threadTs },
+		query: { threadId: sThreadId },
 	});
-	telegramUserId = thread?.userId;
+	const rUserId = thread?.userId;
 
-	forwardMessageToTelegram({ telegramUserId, text, att });
+	forwardMessageToTelegram({ rUserId, rMessage: sMessage, rAtt: sAtt });
 
 	const query = {
-		userId: slackUserId,
+		userId: sUserId,
 		source: "slack",
 		dest: "telegram",
 		role: "teacher",
-		text,
+		text: sMessage,
 		ts: now,
-		threadId: threadTs,
+		threadId,
 	};
 
 	getDBRequest("addToHistory", {
@@ -27,22 +27,22 @@ async function answerToStudent({ slackUserId, threadTs, text, att }) {
 
 	if (!thread.active) {
 		processActions("sReopenThread", {
-			userId: slackUserId,
-			channel: process.env.SLACK_CHANNEL,
-			ts: threadTs,
+			sUserId,
+			rChannelId: process.env.SLACK_CHANNEL,
+			threadId,
 		});
 	}
 
 	getDBRequest("updateThread", {
-		query: { threadId: threadTs },
+		query: { threadId: sThreadId },
 		data: {
 			lastOutMessage: now,
 			newMessage: {
-				userId: slackUserId,
+				userId: sUserId,
 				source: "slack",
 				dest: "telegram",
 				role: "teacher",
-				text,
+				text: sMessage,
 				ts: now,
 			},
 		},

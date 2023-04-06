@@ -3,50 +3,33 @@ const { processContext } = require("@processes/processContext/processContext");
 const { filesPrepare } = require("@utils/filesPrepare");
 const { processModals } = require("@processes/proccessModals/processModals");
 const { processActions } = require("@processes/processActions/processActions");
-
-function getContext(message) {
-	if (
-		(message.subtype === undefined || message.subtype === "file_share") &&
-		!message.text.includes("<@U") &&
-		message.thread_ts
-	) {
-		return "sAnswer";
-	}
-	return undefined;
-}
-
-function getActionContext({ type, reaction, item }) {
-	if (type === "reaction_added" && reaction === "o") {
-		return "sCloseThread";
-	}
-	if (type === "reaction_removed" && reaction === "o") {
-		return "sReopenThread";
-	}
-	return undefined;
-}
+const { getSlackContext } = require("../../utils/getContext");
+const { incomingData } = require("./dataProcessor");
 
 function slackListenerRun() {
-	listener.message(async ({ message }) => {
-		const slackUserId = message?.user;
-		const text = message?.text;
-		const threadTs = message?.thread_ts;
-		const att = await filesPrepare(message?.files);
-		const context = getContext(message);
-		processContext(context, { slackUserId, text, threadTs, att });
+	listener.message(async ({ payload }) => {
+		const data = Object.assign({}, incomingData({ payload }), {
+			sAtt: await filesPrepare(payload?.files),
+		});
+		const context = getSlackContext(payload);
+		processContext(context, data);
 	});
 
 	listener.command("/broadcast", async ({ payload, ack }) => {
-		await processModals("sBroadcastModal", { trigger: payload.trigger_id });
+		const data = incomingData({ payload });
+		await processModals("sBroadcastModal", data);
 		ack();
 	});
 
 	listener.command("/newdm", async ({ payload, ack }) => {
-		await processModals("sDmModal", { trigger: payload.trigger_id });
+		const data = incomingData({ payload });
+		await processModals("sDmModal", data);
 		ack();
 	});
 
 	listener.shortcut("closeThread", async ({ payload, ack }) => {
-		await processActions("sCloseThread", payload);
+		const data = incomingData({ payload });
+		await processActions("sCloseThread", data);
 		ack();
 	});
 
@@ -58,26 +41,6 @@ function slackListenerRun() {
 	listener.view("newDmSubmit", async ({ view, body, ack }) => {
 		await processModals("sDmSubmit", { view, user: body.user });
 		ack();
-	});
-
-	listener.event("reaction_added", async ({ event }) => {
-		/*
-		const userId = event.user;
-		const channel = event.item.channel;
-		const ts = event.item.ts;
-		const actionContext = getActionContext(event);
-		await processActions(actionContext, { userId, channel, ts });
-		*/
-	});
-
-	listener.event("reaction_removed", async ({ event }) => {
-		/*
-		const userId = event.user;
-		const channel = event.item.channel;
-		const ts = event.item.ts;
-		const actionContext = getActionContext(event);
-		await processActions(actionContext, { userId, channel, ts });
-		*/
 	});
 }
 

@@ -1,28 +1,32 @@
+const { log } = require("../../../services/log/log");
 const { getDBRequest } = require("@mg/requests");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-async function userHelp({ telegramUser }) {
-	const now = Date.now();
+async function userHelp({ from }) {
+	try {
+		const now = Date.now();
 
-	if (telegramUser) {
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			to: from,
 			intent: "help",
-			lang: "ru",
+			lang: "ru", //from.lang
 		});
 
 		getDBRequest("addAction", {
 			query: {
-				userId: telegramUser?.id,
+				userId: from.userId,
 				role: "student",
-				actionCode: 002,
+				actionCode: 2,
 				action: "Request help",
 				ts: now,
 			},
 		});
-	}
 
-	return { OK: true, newBotContext: undefined };
+		return { OK: true, newBotContext: undefined };
+	} catch (e) {
+		log.warn("Error while processing user help.\n", e);
+		return { OK: false, newBotContext: undefined };
+	}
 }
 
 module.exports = { userHelp };

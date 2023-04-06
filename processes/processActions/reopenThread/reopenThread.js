@@ -1,12 +1,12 @@
 const { getDBRequest } = require("@mg/requests");
 const { removeSlackReaction } = require("@sl/actions/actions");
 
-async function reopenThread({ userId, channel, ts }) {
-	if (channel !== process.env.SLACK_CHANNEL) {
+async function reopenThread({ userId, sChannelId, threadId }) {
+	if (sChannelId !== process.env.SLACK_CHANNEL) {
 		return undefined;
 	}
 	const now = Date.now();
-	const query = { threadId: ts, active: false };
+	const query = { threadId, active: false };
 	const data = { active: true };
 	const newThreadStatus = await getDBRequest("updateThread", {
 		query,
@@ -18,9 +18,9 @@ async function reopenThread({ userId, channel, ts }) {
 	}
 
 	removeSlackReaction({
-		channelId: channel,
+		rChannelId: sChannelId,
 		type: "reopenThread",
-		threadId: ts,
+		threadId,
 	});
 
 	getDBRequest("addAction", {

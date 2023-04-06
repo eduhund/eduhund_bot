@@ -4,15 +4,15 @@ const {
 	answerTelegramCallback,
 } = require("@tg/actions/actions");
 
-async function userCancel({ telegramUser, messageId, callbackId }) {
+async function userCancel({ sUserId, messageId, callbackId }) {
 	if (telegramUser) {
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId: sUserId,
 			intent: "userCancel",
 			lang: "ru",
 		});
 		deleteTelegramMessage({
-			telegramUserId: telegramUser?.id,
+			userId: sUserId,
 			messageId,
 		});
 		answerTelegramCallback({ callbackId });

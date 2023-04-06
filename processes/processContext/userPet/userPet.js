@@ -1,19 +1,19 @@
 const { getDBRequest } = require("@mg/requests");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-async function userPet({ telegramUser }) {
+async function userPet({ userId }) {
 	const now = Date.now();
 
-	if (telegramUser) {
+	if (userId) {
 		sendMessageToTelegram({
-			telegramUserId: telegramUser?.id,
+			userId,
 			intent: "cat",
 			lang: "ru",
 		});
 
 		getDBRequest("addAction", {
 			query: {
-				userId: telegramUser?.id,
+				userId,
 				role: "student",
 				actionCode: 007,
 				action: "Pet the cat",

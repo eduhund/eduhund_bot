@@ -1,13 +1,13 @@
-function broadcastSuccess({ text, user, data }) {
+function broadcastSuccess({ text, sUserId, sUsername, data }) {
 	const form = {
 		channel: process.env.SLACK_CHANNEL,
-		text: `${user.name} вещает студентам`,
+		text: `${sUsername} вещает студентам`,
 		blocks: [
 			{
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: `<@${user.id}> отправил_a сообщение ${data.counter} студентам`,
+					text: `<@${sUserId}> отправил_a сообщение ${data.counter} студентам`,
 				},
 			},
 			{

@@ -1,14 +1,14 @@
-function mainMessage({ user, text, att }) {
-	const informerMessage = `${user?.firstName} ${user?.lastName}: ${text}`;
-	var userInfo = `*<https://t.me/${user?.username}|${user?.firstName} ${user?.lastName}>*`;
-	if (user?.email) {
-		userInfo += ` / ${user?.email}`;
+function mainMessage({ from, to, message }) {
+	const informerMessage = `${from.firstName} ${from.lastName}: ${message.text}`;
+	var userInfo = `*<https://t.me/${from.username}|${from.firstName} ${from.lastName}>*`;
+	if (from.email) {
+		userInfo += ` / ${from.email}`;
 	}
-	if (user?.modules) {
-		userInfo += ` / ${user.modules.join(", ")}`;
+	if (from.modules) {
+		userInfo += ` / ${from.modules.join(", ")}`;
 	}
 	const form = {
-		channel: process.env.SLACK_CHANNEL,
+		channel: to.channelId,
 		text: informerMessage,
 		blocks: [
 			{
@@ -24,27 +24,27 @@ function mainMessage({ user, text, att }) {
 				type: "section",
 				text: {
 					type: "plain_text",
-					text: text || " ",
+					text: message.text || " ",
 					emoji: true,
 				},
 			},
 		],
 	};
 
-	if (att.image) {
+	if (message.att?.image) {
 		form.blocks.push({
 			type: "image",
-			image_url: att.image,
+			image_url: message.att.image,
 			alt_text: "An incredibly cute kitten.",
 		});
 	}
 
-	if (att.document) {
+	if (message.att?.document) {
 		form.blocks.push({
 			type: "section",
 			text: {
 				type: "mrkdwn",
-				text: `*<${att.document}|Посмотреть вложение>*`,
+				text: `*<${message.att.document}|Посмотреть вложение>*`,
 			},
 		});
 	}

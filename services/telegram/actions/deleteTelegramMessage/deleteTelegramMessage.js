@@ -1,7 +1,7 @@
 const { bot } = require("@tg/telegram");
 
-async function deleteTelegramMessage({ telegramUserId, messageId }) {
-	await bot.telegram.deleteMessage(telegramUserId, messageId);
+async function deleteTelegramMessage({ userId, messageId }) {
+	await bot.telegram.deleteMessage(userId, messageId);
 }
 
 module.exports = { deleteTelegramMessage };
