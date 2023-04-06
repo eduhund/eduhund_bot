@@ -45,6 +45,11 @@ function slackListenerRun() {
 		ack();
 	});
 
+	listener.shortcut("closeThread", async ({ payload, ack }) => {
+		await processActions("sCloseThread", payload);
+		ack();
+	});
+
 	listener.view("broadcastSubmit", async ({ view, body, ack }) => {
 		await processModals("sBroadcastSubmit", { view, user: body.user });
 		ack();
@@ -56,19 +61,23 @@ function slackListenerRun() {
 	});
 
 	listener.event("reaction_added", async ({ event }) => {
+		/*
 		const userId = event.user;
 		const channel = event.item.channel;
 		const ts = event.item.ts;
 		const actionContext = getActionContext(event);
 		await processActions(actionContext, { userId, channel, ts });
+		*/
 	});
 
 	listener.event("reaction_removed", async ({ event }) => {
+		/*
 		const userId = event.user;
 		const channel = event.item.channel;
 		const ts = event.item.ts;
 		const actionContext = getActionContext(event);
 		await processActions(actionContext, { userId, channel, ts });
+		*/
 	});
 }
 

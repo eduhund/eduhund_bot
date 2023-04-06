@@ -17,6 +17,7 @@ const slackMessages = {
 	dmModal,
 	dmSuccess,
 	closeThreadManual,
+	//deprecated
 	reopenThreadManual,
 };
 

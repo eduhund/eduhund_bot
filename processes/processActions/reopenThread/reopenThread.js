@@ -1,5 +1,5 @@
 const { getDBRequest } = require("@mg/requests");
-const { sendMessageToSlack } = require("@sl/actions/actions");
+const { removeSlackReaction } = require("@sl/actions/actions");
 
 async function reopenThread({ userId, channel, ts }) {
 	if (channel !== process.env.SLACK_CHANNEL) {
@@ -17,9 +17,9 @@ async function reopenThread({ userId, channel, ts }) {
 		return undefined;
 	}
 
-	sendMessageToSlack({
-		type: "reopenThreadManual",
-		user: { id: userId },
+	removeSlackReaction({
+		channelId: channel,
+		type: "reopenThread",
 		threadId: ts,
 	});
 

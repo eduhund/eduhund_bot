@@ -7,7 +7,7 @@ function getThread({ query = {}, returns = [] }) {
 	for (const param of returns) {
 		projection[param] = 1;
 	}
-	return THREADS.findOne(query, { projection });
+	return THREADS.findOne(query, { projection, sort: { $natural: -1 } });
 }
 
 module.exports = { getThread };

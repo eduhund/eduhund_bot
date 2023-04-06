@@ -1,12 +1,15 @@
 const { getDBRequest } = require("@mg/requests");
-const { sendMessageToSlack } = require("@sl/actions/actions");
+const { sendMessageToSlack, addSlackReaction } = require("@sl/actions/actions");
 
-async function closeThread({ userId, channel, ts }) {
-	if (channel !== process.env.SLACK_CHANNEL) {
+async function closeThread({ user, channel, message_ts }) {
+	const userId = user.id;
+	const channelId = channel.id;
+	const threadId = message_ts;
+	if (channelId !== process.env.SLACK_CHANNEL) {
 		return undefined;
 	}
 	const now = Date.now();
-	const query = { threadId: ts, active: true };
+	const query = { threadId, active: true };
 	const data = { active: false };
 	const newThreadStatus = await getDBRequest("updateThread", {
 		query,
@@ -20,8 +23,10 @@ async function closeThread({ userId, channel, ts }) {
 	sendMessageToSlack({
 		type: "closeThreadManual",
 		user: { id: userId },
-		threadId: ts,
+		threadId,
 	});
+
+	addSlackReaction({ channelId, type: "closeThread", threadId });
 
 	getDBRequest("addAction", {
 		query: {
