@@ -1,4 +1,4 @@
-function broadcastModal({ sTriggerId, modules }) {
+function broadcastModal({ triggerId, modules }) {
 	const options = [];
 	for (const module of modules) {
 		options.push({
@@ -78,7 +78,7 @@ function broadcastModal({ sTriggerId, modules }) {
 	};
 
 	const message = {
-		trigger_id: sTriggerId,
+		trigger_id: triggerId,
 		view: { ...modal },
 	};
 

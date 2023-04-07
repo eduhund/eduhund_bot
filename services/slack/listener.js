@@ -13,19 +13,19 @@ function slackListenerRun() {
 	});
 
 	listener.command("/broadcast", async ({ payload, ack }) => {
-		const data = incomingData({ payload });
+		const data = await incomingData({ payload });
 		await processModals("sBroadcastModal", data);
 		ack();
 	});
 
 	listener.command("/newdm", async ({ payload, ack }) => {
-		const data = incomingData({ payload });
+		const data = await incomingData({ payload });
 		await processModals("sDmModal", data);
 		ack();
 	});
 
 	listener.shortcut("closeThread", async ({ payload, ack }) => {
-		const data = incomingData({ payload });
+		const data = await incomingData({ payload });
 		await processActions("sCloseThread", data);
 		ack();
 	});

@@ -1,11 +1,10 @@
 const { getDBRequest } = require("@mg/requests");
 const { sendModal } = require("../../../services/slack/actions/actions");
 
-async function broadcastModal({ sTriggerId }) {
-	const data = await getDBRequest("getModulesList", {
-		query: {},
-	});
-	return sendModal({ sTriggerId, type: "broadcast", data: { modules: data } });
+async function broadcastModal({ data }) {
+	const { triggerId } = data;
+	const modules = await getDBRequest("getModulesList", {});
+	return sendModal({ triggerId, type: "broadcast", data: { modules } });
 }
 
 module.exports = { broadcastModal };
