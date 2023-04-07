@@ -1,24 +1,32 @@
 const { log } = require("../../services/log/log");
 const { filesPrepare } = require("@utils/filesPrepare");
 
-async function incomingData({ payload, view, body }) {
+async function incomingData(data) {
 	try {
 		return {
 			from: {
-				userId: payload?.message?.user || payload?.user,
-				username: payload?.user?.username,
+				userId: data?.message?.user || data?.user?.id || data?.user,
+				username: data?.user?.username,
 			},
 			message: {
-				schannelId: payload?.channel?.id || payload.channel,
-				threadId: payload?.message?.thread_ts || payload?.thread_ts,
-				messageId: payload?.message?.ts || payload?.ts,
-				date: payload?.message?.ts || payload?.ts,
-				editDate: payload?.ts,
-				text: payload?.message?.text || payload?.text,
-				att: await filesPrepare(payload?.files),
+				schannelId: data?.channel?.id || data.channel,
+				threadId: data?.message?.thread_ts || data?.thread_ts,
+				messageId: data?.message?.ts || data?.ts,
+				date: data?.message?.ts || data?.ts,
+				editDate: data?.ts,
+				text:
+					data?.message?.text ||
+					data?.text ||
+					data?.view?.state?.values?.message?.text?.value ||
+					" ",
+				att: await filesPrepare(data?.files),
 			},
 			data: {
-				triggerId: payload?.trigger_id,
+				triggerId: data?.trigger_id,
+				modulesList:
+					data?.view?.state?.values?.modules?.modulesList?.selected_options,
+				usersList:
+					data?.view?.state?.values?.users?.usersList?.selected_options,
 			},
 		};
 	} catch (e) {

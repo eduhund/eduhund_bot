@@ -9,7 +9,7 @@ const {
 
 const { web } = require("@sl/slack");
 
-async function sendMessageToSlack({ from, to, message }) {
+async function sendMessageToSlack({ from, to, message, data }) {
 	switch (message.type) {
 		case "broadcastSuccess":
 			web.chat.postMessage(broadcastSuccess({ from, message, data }));
@@ -24,7 +24,7 @@ async function sendMessageToSlack({ from, to, message }) {
 			web.chat.postMessage(reopenThreadManual({ from, to }));
 			break;
 		default:
-			if (!to.threadId) {
+			if (!to?.threadId) {
 				const response = await web.chat.postMessage(
 					mainMessage({ from, to, message })
 				);

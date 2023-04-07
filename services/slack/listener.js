@@ -7,31 +7,32 @@ const { incomingData } = require("./dataProcessor");
 
 function slackListenerRun() {
 	listener.message(async ({ payload }) => {
-		const data = await incomingData({ payload });
+		const data = await incomingData(payload);
 		const context = getSlackContext(payload);
 		await processContext(context, data);
 	});
 
 	listener.command("/broadcast", async ({ payload, ack }) => {
-		const data = await incomingData({ payload });
+		const data = await incomingData(payload);
 		await processModals("sBroadcastModal", data);
 		ack();
 	});
 
 	listener.command("/newdm", async ({ payload, ack }) => {
-		const data = await incomingData({ payload });
+		const data = await incomingData(payload);
 		await processModals("sDmModal", data);
 		ack();
 	});
 
 	listener.shortcut("closeThread", async ({ payload, ack }) => {
-		const data = await incomingData({ payload });
+		const data = await incomingData(payload);
 		await processActions("sCloseThread", data);
 		ack();
 	});
 
-	listener.view("broadcastSubmit", async ({ view, body, ack }) => {
-		await processModals("sBroadcastSubmit", { view, user: body.user });
+	listener.view("broadcastSubmit", async ({ body, ack }) => {
+		const data = await incomingData(body);
+		await processModals("sBroadcastSubmit", data);
 		ack();
 	});
 

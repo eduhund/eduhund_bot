@@ -24,7 +24,7 @@ async function incomingData(data) {
 				cbId: data?.id,
 				date: data?.date,
 				editDate: data?.edit_date,
-				text: data?.text || data?.caption || data?.data,
+				text: data?.text || data?.caption || data?.data || " ",
 				att: {
 					image: imageUrl,
 					document: docUrl || videoUrl || audioUrl,
