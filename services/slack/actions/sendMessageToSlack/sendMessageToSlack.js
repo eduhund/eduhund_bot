@@ -18,10 +18,10 @@ async function sendMessageToSlack({ from, to, message, data }) {
 			web.chat.postMessage(dmSuccess({ from, message, data }));
 			break;
 		case "closeThreadManual":
-			web.chat.postMessage(closeThreadManual({ from, to }));
+			web.chat.postMessage(closeThreadManual({ from, message }));
 			break;
 		case "reopenThreadManual":
-			web.chat.postMessage(reopenThreadManual({ from, to }));
+			web.chat.postMessage(reopenThreadManual({ from, message }));
 			break;
 		default:
 			if (!to?.threadId) {

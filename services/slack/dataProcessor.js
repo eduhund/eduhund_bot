@@ -5,11 +5,11 @@ async function incomingData(data) {
 	try {
 		return {
 			from: {
-				userId: data?.message?.user || data?.user?.id || data?.user,
+				userId: data?.user?.id || data?.user || data?.message?.user,
 				username: data?.user?.username,
 			},
 			message: {
-				schannelId: data?.channel?.id || data.channel,
+				channelId: data?.channel?.id || data.channel,
 				threadId: data?.message?.thread_ts || data?.thread_ts,
 				messageId: data?.message?.ts || data?.ts,
 				date: data?.message?.ts || data?.ts,

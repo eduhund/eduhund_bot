@@ -1,13 +1,13 @@
-function dmSuccess({ text, sUserId, sUsername, data }) {
+function dmSuccess({ from, message, data }) {
 	const form = {
 		channel: process.env.SLACK_CHANNEL,
-		text: `${sUsername} пишет студентам в личку`,
+		text: `${from.username} пишет студентам в личку`,
 		blocks: [
 			{
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: `<@${sUserId}> отправил_a сообщение ${
+					text: `<@${from.userId}> отправил_a сообщение ${
 						data.counter
 					} студентам: ${data.users.join(", ")}`,
 				},
@@ -19,7 +19,7 @@ function dmSuccess({ text, sUserId, sUsername, data }) {
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: `_${text}_`,
+					text: `_${message.text}_`,
 				},
 			},
 		],

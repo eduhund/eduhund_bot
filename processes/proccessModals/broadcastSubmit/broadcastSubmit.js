@@ -40,7 +40,6 @@ async function broadcastSubmit({ from, message, data }) {
 		message.type = "broadcastSuccess";
 
 		sendMessageToSlack({
-			type: "broadcastSuccess",
 			from,
 			message,
 			data: { counter },

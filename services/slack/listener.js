@@ -36,8 +36,9 @@ function slackListenerRun() {
 		ack();
 	});
 
-	listener.view("newDmSubmit", async ({ view, body, ack }) => {
-		await processModals("sDmSubmit", { view, user: body.user });
+	listener.view("newDmSubmit", async ({ body, ack }) => {
+		const data = await incomingData(body);
+		await processModals("sDmSubmit", data);
 		ack();
 	});
 }

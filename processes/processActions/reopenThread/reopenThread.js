@@ -1,37 +1,42 @@
 const { getDBRequest } = require("@mg/requests");
 const { removeSlackReaction } = require("@sl/actions/actions");
 
-async function reopenThread({ userId, sChannelId, threadId }) {
-	if (sChannelId !== process.env.SLACK_CHANNEL) {
-		return undefined;
-	}
+async function reopenThread({ from, message }) {
 	const now = Date.now();
-	const query = { threadId, active: false };
-	const data = { active: true };
-	const newThreadStatus = await getDBRequest("updateThread", {
-		query,
-		data,
-	});
+	try {
+		const { channelId, threadId } = message;
+		if (channelId !== process.env.SLACK_CHANNEL) {
+			return undefined;
+		}
+		const newThreadStatus = await getDBRequest("updateThread", {
+			query: { threadId, active: false },
+			data: { active: true },
+		});
 
-	if (!newThreadStatus?.value) {
-		return undefined;
+		if (!newThreadStatus?.value) {
+			return undefined;
+		}
+
+		removeSlackReaction({
+			type: "reopenThread",
+			channelId,
+			threadId,
+		});
+
+		getDBRequest("addAction", {
+			query: {
+				userId: from.userId,
+				role: "teacher",
+				actionCode: 13,
+				action: "Reopen thread",
+				ts: now,
+			},
+		});
+		return { OK: true, newBotContext: undefined };
+	} catch (e) {
+		log.warn("Error with reopening thread.\n", e);
+		return { OK: false, newBotContext: undefined };
 	}
-
-	removeSlackReaction({
-		rChannelId: sChannelId,
-		type: "reopenThread",
-		threadId,
-	});
-
-	getDBRequest("addAction", {
-		query: {
-			userId,
-			role: "teacher",
-			actionCode: 13,
-			action: "Reopen thread",
-			ts: now,
-		},
-	});
 }
 
 module.exports = { reopenThread };

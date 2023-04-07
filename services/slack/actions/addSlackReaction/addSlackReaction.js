@@ -7,9 +7,9 @@ function reactionContext(type) {
 	}
 }
 
-function addSlackReaction({ sChannelId, type, threadId }) {
+function addSlackReaction({ type, channelId, threadId }) {
 	web.reactions.add({
-		channel: sChannelId,
+		channel: channelId,
 		name: reactionContext(type),
 		timestamp: threadId,
 	});
