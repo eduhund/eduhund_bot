@@ -1,6 +1,5 @@
 const { listener } = require("./slack");
 const { processContext } = require("@processes/processContext/processContext");
-const { filesPrepare } = require("@utils/filesPrepare");
 const { processModals } = require("@processes/proccessModals/processModals");
 const { processActions } = require("@processes/processActions/processActions");
 const { getSlackContext } = require("../../utils/getContext");
@@ -8,11 +7,9 @@ const { incomingData } = require("./dataProcessor");
 
 function slackListenerRun() {
 	listener.message(async ({ payload }) => {
-		const data = Object.assign({}, incomingData({ payload }), {
-			sAtt: await filesPrepare(payload?.files),
-		});
+		const data = await incomingData({ payload });
 		const context = getSlackContext(payload);
-		processContext(context, data);
+		await processContext(context, data);
 	});
 
 	listener.command("/broadcast", async ({ payload, ack }) => {

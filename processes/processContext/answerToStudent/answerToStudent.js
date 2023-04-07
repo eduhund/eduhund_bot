@@ -2,53 +2,57 @@ const { getDBRequest } = require("@mg/requests");
 const { processActions } = require("../../processActions/processActions");
 const { forwardMessageToTelegram } = require("@tg/actions/actions");
 
-async function answerToStudent({ sUserId, threadId, sMessage, sAtt }) {
+async function answerToStudent({ from, message }) {
 	const now = Date.now();
-	const thread = await getDBRequest("getThread", {
-		query: { threadId: sThreadId },
-	});
-	const rUserId = thread?.userId;
+	try {
+		const { userId } = from;
+		const { threadId, text } = message;
 
-	forwardMessageToTelegram({ rUserId, rMessage: sMessage, rAtt: sAtt });
-
-	const query = {
-		userId: sUserId,
-		source: "slack",
-		dest: "telegram",
-		role: "teacher",
-		text: sMessage,
-		ts: now,
-		threadId,
-	};
-
-	getDBRequest("addToHistory", {
-		query,
-	});
-
-	if (!thread.active) {
-		processActions("sReopenThread", {
-			sUserId,
-			rChannelId: process.env.SLACK_CHANNEL,
-			threadId,
+		const thread = await getDBRequest("getThread", {
+			query: { threadId },
 		});
-	}
 
-	getDBRequest("updateThread", {
-		query: { threadId: sThreadId },
-		data: {
-			lastOutMessage: now,
-			newMessage: {
-				userId: sUserId,
+		const to = {
+			userId: thread?.userId,
+		};
+
+		forwardMessageToTelegram({ to, message });
+
+		getDBRequest("addToHistory", {
+			query: {
+				userId,
 				source: "slack",
 				dest: "telegram",
 				role: "teacher",
-				text: sMessage,
+				text,
 				ts: now,
+				threadId,
 			},
-		},
-	});
+		});
 
-	return { OK: true, newBotContext: undefined };
+		if (!thread.active) {
+			processActions("sReopenThread", { from, message });
+		}
+
+		getDBRequest("updateThread", {
+			query: { threadId },
+			data: {
+				lastOutMessage: now,
+				newMessage: {
+					userId,
+					source: "slack",
+					dest: "telegram",
+					role: "teacher",
+					text,
+					ts: now,
+				},
+			},
+		});
+		return { OK: true, newBotContext: undefined };
+	} catch (e) {
+		log.warn("Error with processing answering student to Telegram.\n", e);
+		return { OK: false, newBotContext: undefined };
+	}
 }
 
 module.exports = { answerToStudent };

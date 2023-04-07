@@ -1,32 +1,35 @@
 const { bot } = require("@tg/telegram");
 
-async function forwardMessageToTelegram({ rUserId, rMessage, rAtt = [] }) {
-	if (rAtt.length === 0) {
-		await bot.telegram.sendMessage(rUserId, rMessage);
+async function forwardMessageToTelegram({ to, message }) {
+	const { userId } = to;
+	const { text, att = [] } = message;
+	if (att.length === 0) {
+		await bot.telegram.sendMessage(userId, text);
 	}
-	if (rAtt.length === 1) {
-		switch (rAtt[0].type) {
+	if (att.length === 1) {
+		const { url } = att[0];
+		switch (att.type) {
 			case "png":
 			case "jpg":
-				await bot.telegram.sendPhoto(rUserId, rAtt[0].url, {
-					caption: rMessage,
+				await bot.telegram.sendPhoto(userId, url, {
+					caption: text,
 				});
 				break;
 			case "pdf":
 			case "zip":
-				await bot.telegram.sendDocument(rUserId, rAtt[0].url, {
-					caption: rMessage,
+				await bot.telegram.sendDocument(userId, url, {
+					caption: text,
 				});
 				break;
 			case "mpeg":
 			case "mov":
-				await bot.telegram.sendVideo(rUserId, rAtt[0].url, {
-					caption: rMessage,
+				await bot.telegram.sendVideo(userId, url, {
+					caption: text,
 				});
 				break;
 			case "gif":
-				await bot.telegram.sendAnimation(rUserId, rAtt[0].url, {
-					caption: rMessage,
+				await bot.telegram.sendAnimation(userId, url, {
+					caption: text,
 				});
 				break;
 		}
