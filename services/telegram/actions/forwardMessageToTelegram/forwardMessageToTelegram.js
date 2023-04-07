@@ -7,8 +7,8 @@ async function forwardMessageToTelegram({ to, message }) {
 		await bot.telegram.sendMessage(userId, text);
 	}
 	if (att.length === 1) {
-		const { url } = att[0];
-		switch (att.type) {
+		const { type, url } = att[0];
+		switch (type) {
 			case "png":
 			case "jpg":
 				await bot.telegram.sendPhoto(userId, url, {
