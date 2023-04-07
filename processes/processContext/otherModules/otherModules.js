@@ -1,15 +1,23 @@
+const { log } = require("../../../services/log/log");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-async function otherModules({ userId }) {
-	if (userId) {
+async function otherModules({ from }) {
+	try {
 		sendMessageToTelegram({
-			userId,
+			to: from,
 			intent: "otherModules",
-			lang: "ru",
+			lang: "ru", //from.lang
 		});
+		return { OK: true, newBotContext: undefined };
+	} catch (e) {
+		log.warn("Error with sending other modules.\n", e);
+		sendMessageToTelegram({
+			to: from,
+			intent: "error",
+			lang: "ru", //from.lang
+		});
+		return { OK: false, newBotContext: undefined };
 	}
-
-	return { OK: true, newBotContext: undefined };
 }
 
 module.exports = { otherModules };

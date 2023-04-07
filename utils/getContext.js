@@ -15,7 +15,7 @@ function getTelegramContext(message, botContext) {
 		return "tOtherModules";
 	}
 	if (text === "• сменить email •") {
-		return "tChangeMail";
+		return "tChangeMailInit";
 	}
 	if (text === "• забрать сертификат •") {
 		return "tGetDiploma";

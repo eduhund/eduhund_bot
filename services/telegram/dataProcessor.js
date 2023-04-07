@@ -20,7 +20,8 @@ async function incomingData(data) {
 				lang: data?.from?.language_code,
 			},
 			message: {
-				id: data?.message_id || data?.id,
+				id: data?.message?.message_id || data?.message_id,
+				cbId: data?.id,
 				date: data?.date,
 				editDate: data?.edit_date,
 				text: data?.text || data?.caption || data?.data,

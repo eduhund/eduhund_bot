@@ -1,24 +1,28 @@
+const { log } = require("../../../services/log/log");
+
 const {
 	sendMessageToTelegram,
 	deleteTelegramMessage,
 	answerTelegramCallback,
 } = require("@tg/actions/actions");
 
-async function userCancel({ sUserId, messageId, callbackId }) {
-	if (telegramUser) {
+async function userCancel({ from, message }) {
+	try {
 		sendMessageToTelegram({
-			userId: sUserId,
+			to: from,
 			intent: "userCancel",
-			lang: "ru",
+			lang: "ru", //from.lang
 		});
 		deleteTelegramMessage({
-			userId: sUserId,
-			messageId,
+			userId: from.userId,
+			messageId: message.id,
 		});
-		answerTelegramCallback({ callbackId });
+		answerTelegramCallback({ callbackId: message.cbId });
+		return { OK: true, newBotContext: undefined };
+	} catch (e) {
+		log.warn("Error with user cancel button.\n", e);
+		return { OK: false, newBotContext: undefined };
 	}
-
-	return { OK: true, newBotContext: undefined };
 }
 
 module.exports = { userCancel };

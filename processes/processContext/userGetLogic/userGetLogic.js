@@ -1,16 +1,18 @@
+const { log } = require("../../../services/log/log");
 const { getDBRequest } = require("@mg/requests");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 const { getLogicModule } = require("@utils/getLogicModule");
 
-async function userGetLogic({ userId }) {
+async function userGetLogic({ from }) {
 	const now = Date.now();
-	const url = await getLogicModule(userId);
 
-	if (url) {
+	try {
+		const url = await getLogicModule(from.userId);
+
 		sendMessageToTelegram({
-			userId,
+			to: from,
 			intent: "userLogicModule",
-			lang: "ru",
+			lang: "ru", //from.lang
 			data: {
 				url,
 			},
@@ -28,15 +30,16 @@ async function userGetLogic({ userId }) {
 				ts: now,
 			},
 		});
-	} else {
+		return { OK: true, newBotContext: undefined };
+	} catch (e) {
+		log.warn("Error with sending logic module.\n", e);
 		sendMessageToTelegram({
-			userId,
+			to: from,
 			intent: "error",
-			lang: "ru",
+			lang: "ru", //from.lang
 		});
+		return { OK: false, newBotContext: undefined };
 	}
-
-	return { OK: true, newBotContext: undefined };
 }
 
 module.exports = { userGetLogic };

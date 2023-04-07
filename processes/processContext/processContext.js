@@ -4,7 +4,10 @@ const { userStart } = require("./userStart/userStart");
 const { userHelp } = require("./userHelp/userHelp");
 const { userPet } = require("./userPet/userPet");
 const { userSettings } = require("./userSettings/userSettings");
-const { userChangeEmail } = require("./userChangeEmail/userChangeEmail");
+const {
+	userChangeEmail,
+	userChangeEmailInit,
+} = require("./userChangeEmail/userChangeEmail");
 const { userCancel } = require("./userCancel/userCancel");
 const { userGetLogic } = require("./userGetLogic/userGetLogic");
 const { otherModules } = require("./otherModules/otherModules");
@@ -13,7 +16,7 @@ const {
 } = require("./forwardMessageToSlack/forwardMessageToSlack");
 const { answerToStudent } = require("./answerToStudent/answerToStudent");
 
-function processContext(context, data) {
+function processContext(context, data, botContext) {
 	try {
 		switch (context) {
 			case "tStart":
@@ -22,8 +25,10 @@ function processContext(context, data) {
 				return userHelp(data);
 			case "tSettings":
 				return userSettings(data);
-			case "tChangeEmail":
+			case "tChangeEmailInit":
 			case "tChangeEmailButton":
+				return userChangeEmailInit(data);
+			case "tChangeEmail":
 				return userChangeEmail(data);
 			case "tCancelButton":
 				return userCancel(data);

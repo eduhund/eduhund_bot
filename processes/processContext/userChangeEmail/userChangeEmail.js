@@ -10,133 +10,131 @@ function getEmail(text) {
 	}
 }
 
-async function changeEmailInit({ userId }) {
+async function userChangeEmailInit({ from }) {
 	const now = Date.now();
 
-	if (userId) {
+	try {
 		sendMessageToTelegram({
-			userId,
+			to: from,
 			intent: "changeEmailInit",
-			lang: "ru",
+			lang: "ru", //user.lang
 		});
 
 		getDBRequest("addAction", {
 			query: {
-				userId,
+				userId: from.userId,
 				role: "student",
-				actionCode: 004,
+				actionCode: 4,
 				action: "Change email request",
 				ts: now,
 			},
 		});
+		return { OK: true, newBotContext: "changeEmail" };
+	} catch (e) {
+		log.warn("Error with changing user email.\n", e);
+		return { OK: false, newBotContext: undefined };
 	}
-
-	return { OK: true, newBotContext: "changeEmail" };
 }
 
-async function changeEmailFail({ userId }) {
+async function changeEmailFail(user) {
 	const now = Date.now();
 
-	if (userId) {
-		getDBRequest("addAction", {
-			query: {
-				userId,
-				role: "student",
-				actionCode: 005,
-				action: "Change email fail",
-				ts: now,
-			},
-		});
-
+	try {
 		sendMessageToTelegram({
-			userId,
+			to: user,
 			intent: "changeEmailFail",
-			lang: "ru",
-		});
-	}
-
-	return { OK: true, newBotContext: "changeEmail" };
-}
-
-async function changeEmailError({ userId }) {
-	const now = Date.now();
-
-	if (userId) {
-		sendMessageToTelegram({
-			userId,
-			intent: "changeEmailError",
-			lang: "ru",
+			lang: "ru", //user.lang
 		});
 
 		getDBRequest("addAction", {
 			query: {
-				userId,
+				userId: user.userId,
 				role: "student",
-				actionCode: 005,
+				actionCode: 7,
 				action: "Change email fail",
 				ts: now,
 			},
 		});
+		return { OK: true, newBotContext: "changeEmail" };
+	} catch (e) {
+		log.warn("Error with changing user email.\n", e);
+		return { OK: false, newBotContext: undefined };
 	}
-
-	return { OK: true, newBotContext: "changeEmail" };
 }
 
-async function changeEmailSuccess({ userId, email }) {
+async function changeEmailError(user) {
 	const now = Date.now();
 
-	if (userId) {
+	try {
+		sendMessageToTelegram({
+			to: user,
+			intent: "changeEmailError",
+			lang: "ru", //user.lang
+		});
+
 		getDBRequest("addAction", {
 			query: {
-				userId,
+				userId: user.userId,
 				role: "student",
-				actionCode: 006,
-				action: "Change email success",
+				actionCode: 6,
+				action: "Change email error",
 				ts: now,
 			},
 		});
+		return { OK: true, newBotContext: "changeEmail" };
+	} catch (e) {
+		log.warn("Error with changing user email.\n", e);
+		return { OK: false, newBotContext: undefined };
+	}
+}
 
+async function changeEmailSuccess(user, email) {
+	const now = Date.now();
+
+	try {
 		getDBRequest("updateUserInfo", {
 			query: {
-				userId,
+				userId: user.userId,
 			},
 			data: { email },
 		});
 
 		sendMessageToTelegram({
-			userId,
+			to: user,
 			intent: "changeEmailSuccess",
-			lang: "ru",
+			lang: "ru", //user.lang
 		});
-	}
 
-	return { OK: true, newBotContext: undefined };
+		getDBRequest("addAction", {
+			query: {
+				userId: user.userId,
+				role: "student",
+				actionCode: 5,
+				action: "Change email success",
+				ts: now,
+			},
+		});
+		return { OK: true, newBotContext: undefined };
+	} catch (e) {
+		log.warn("Error with changing user email.\n", e);
+		return { OK: false, newBotContext: undefined };
+	}
 }
 
-async function userChangeEmail({ userId, text, botContext }) {
-	const now = Date.now();
-	const user = await getDBRequest("getUserInfo", {
-		query: { userId },
-	});
-
-	if (!botContext) {
-		return changeEmailInit({ userId });
-	}
-
-	const currentEmail = user?.email;
-	const extrudedEmail = getEmail(text);
+async function userChangeEmail({ from, message }) {
+	const extrudedEmail = getEmail(message.text);
 	if (extrudedEmail) {
 		const student = await getDBRequest("getStudentInfo", {
 			query: { email: extrudedEmail },
 		});
 		if (student) {
-			return changeEmailSuccess({ userId, email: extrudedEmail });
+			return changeEmailSuccess(from, extrudedEmail);
 		} else {
-			return changeEmailFail({ userId });
+			return changeEmailFail(from);
 		}
 	} else {
-		return changeEmailError({ userId });
+		return changeEmailError(from);
 	}
 }
 
-module.exports = { userChangeEmail };
+module.exports = { userChangeEmail, userChangeEmailInit };
