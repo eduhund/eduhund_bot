@@ -1,13 +1,15 @@
 const { STUDENTS } = require("../mongo");
 
-function getStudentInfo({ query = {}, returns = [] }) {
+async function getStudentInfo({ query, returns = [] }) {
+	if (!query || Object.keys(query).length === 0) return undefined;
 	const projection = {
 		_id: 0,
 	};
 	for (const param of returns) {
 		projection[param] = 1;
 	}
-	return STUDENTS.findOne(query, { projection });
+	const response = await STUDENTS.findOne(query, { projection });
+	return response || undefined;
 }
 
 module.exports = { getStudentInfo };

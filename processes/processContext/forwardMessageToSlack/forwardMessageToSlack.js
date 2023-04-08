@@ -12,7 +12,7 @@ async function forwardMessageToSlack({ from, message }) {
 
 		if (!user) {
 			log.warn("User not found in database.\n", from);
-			return;
+			return { OK: false, newBotContext: undefined };
 		}
 
 		const activeModules = [];
