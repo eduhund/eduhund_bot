@@ -21,4 +21,4 @@ function updateThread({ query = {}, data = {}, returns = [] }) {
 	return THREADS.findOneAndUpdate(query, toUpdate, { projection });
 }
 
-module.exports = { updateThread };
+module.exports = updateThread;

@@ -10,4 +10,4 @@ function addUser({ query = {}, returns = [] }) {
 	return USERS.insertOne(query, { projection });
 }
 
-module.exports = { addUser };
+module.exports = addUser;

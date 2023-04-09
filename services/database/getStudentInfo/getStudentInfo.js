@@ -12,4 +12,4 @@ async function getStudentInfo({ query, returns = [] }) {
 	return response || undefined;
 }
 
-module.exports = { getStudentInfo };
+module.exports = getStudentInfo;

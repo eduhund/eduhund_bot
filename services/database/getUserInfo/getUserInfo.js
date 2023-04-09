@@ -12,4 +12,4 @@ async function getUserInfo({ query, returns = [] }) {
 	return response || undefined;
 }
 
-module.exports = { getUserInfo };
+module.exports = getUserInfo;

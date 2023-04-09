@@ -10,4 +10,4 @@ function getThread({ query = {}, returns = [] }) {
 	return THREADS.findOne(query, { projection, sort: { $natural: -1 } });
 }
 
-module.exports = { getThread };
+module.exports = getThread;

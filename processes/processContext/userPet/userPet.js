@@ -1,33 +1,27 @@
 const { log } = require("../../../services/log/log");
-const { getDBRequest } = require("@mg/requests");
+const getDBRequest = require("@mg/requests");
+const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
 async function userPet({ from }) {
-	const now = Date.now();
-
 	try {
-		sendMessageToTelegram({
+		const { userId, lang } = from;
+
+		await getDBRequest("addAction", getActionQuery(8, "student", userId));
+
+		await sendMessageToTelegram({
 			to: from,
 			intent: "cat",
-			lang: "ru", //from.lang
+			lang: "ru", //lang
 		});
 
-		getDBRequest("addAction", {
-			query: {
-				userId: from.userId,
-				role: "student",
-				actionCode: 8,
-				action: "Pet the cat",
-				ts: now,
-			},
-		});
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {
 		log.warn("Error with petting kitty.\n", e);
-		sendMessageToTelegram({
+		await sendMessageToTelegram({
 			to: from,
 			intent: "error",
-			lang: "ru", //from.lang
+			lang: "ru", //lang
 		});
 		return { OK: false, newBotContext: undefined };
 	}

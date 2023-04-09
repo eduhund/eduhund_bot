@@ -10,4 +10,4 @@ function addToHistory({ query = {}, returns = [] }) {
 	return HISTORY.insertOne(query, { projection });
 }
 
-module.exports = { addToHistory };
+module.exports = addToHistory;

@@ -1,4 +1,4 @@
-const { getDBRequest } = require("@mg/requests");
+const getDBRequest = require("@mg/requests");
 const { sendMessageToSlack } = require("@sl/actions/actions");
 const { forwardMessageToTelegram } = require("@tg/actions/actions");
 

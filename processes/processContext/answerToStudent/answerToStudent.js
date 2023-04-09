@@ -1,4 +1,4 @@
-const { getDBRequest } = require("@mg/requests");
+const getDBRequest = require("@mg/requests");
 const { processActions } = require("../../processActions/processActions");
 const { forwardMessageToTelegram } = require("@tg/actions/actions");
 

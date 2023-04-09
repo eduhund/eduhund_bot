@@ -10,4 +10,4 @@ function getStudentsList({ query = {}, returns = [] }) {
 	return STUDENTS.find(query, { projection }).toArray();
 }
 
-module.exports = { getStudentsList };
+module.exports = getStudentsList;

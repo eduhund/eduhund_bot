@@ -1,4 +1,4 @@
-const { getDBRequest } = require("@mg/requests");
+const getDBRequest = require("@mg/requests");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
 function getEmail(text) {

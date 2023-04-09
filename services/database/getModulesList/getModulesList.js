@@ -10,4 +10,4 @@ function getModulesList({ query = {}, returns = [] }) {
 	return MODULES.find(query, { projection }).toArray();
 }
 
-module.exports = { getModulesList };
+module.exports = getModulesList;

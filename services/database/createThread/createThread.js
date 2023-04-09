@@ -10,4 +10,4 @@ function createThread({ query = {}, returns = [] }) {
 	return THREADS.insertOne(query, { projection });
 }
 
-module.exports = { createThread };
+module.exports = createThread;

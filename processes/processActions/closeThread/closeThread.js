@@ -1,4 +1,4 @@
-const { getDBRequest } = require("@mg/requests");
+const getDBRequest = require("@mg/requests");
 const { sendMessageToSlack, addSlackReaction } = require("@sl/actions/actions");
 
 async function closeThread({ from, message }) {

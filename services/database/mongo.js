@@ -1,21 +1,32 @@
 const { log } = require("../../services/log/log");
-
 const { MongoClient } = require("mongodb");
 
-const mongo = new MongoClient(process.env.MONGO_URL);
+const mongoURI = process.env.MONGO_URL;
+const platformDatabase = process.env.PLATFORM_DATABASE;
+const botDatabase = process.env.BOT_DATABASE;
 
-const USERS = mongo.db(process.env.BOT_DATABASE).collection("users");
-const THREADS = mongo.db(process.env.BOT_DATABASE).collection("threads");
-const HISTORY = mongo.db(process.env.BOT_DATABASE).collection("history");
-const ACTIONS = mongo.db(process.env.BOT_DATABASE).collection("actions");
+const client = new MongoClient(mongoURI, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+});
 
-const STUDENTS = mongo.db(process.env.PLATFORM_DATABASE).collection("users");
+const botDB = client.db(botDatabase);
+const USERS = botDB.collection("users");
+const THREADS = botDB.collection("threads");
+const HISTORY = botDB.collection("history");
+const ACTIONS = botDB.collection("actions");
 
-const MODULES = mongo.db(process.env.PLATFORM_DATABASE).collection("modules");
+const platformDB = client.db(platformDatabase);
+const STUDENTS = platformDB.collection("users");
+const MODULES = platformDB.collection("modules");
 
 async function connect() {
-	await mongo.connect();
-	log.info("Connected to mongoDB server");
+	try {
+		await client.connect();
+		log.info("Connected to mongoDB server");
+	} catch (error) {
+		log.error("Failed to connect to mongoDB server", error);
+	}
 }
 
 module.exports = {

@@ -16,4 +16,4 @@ function updateUserInfo({ query = {}, data = {}, returns = [] }) {
 	return USERS.findOneAndUpdate(query, toUpdate, { projection });
 }
 
-module.exports = { updateUserInfo };
+module.exports = updateUserInfo;

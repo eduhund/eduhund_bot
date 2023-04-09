@@ -1,5 +1,5 @@
 const { log } = require("../../../services/log/log");
-const { getDBRequest } = require("@mg/requests");
+const getDBRequest = require("@mg/requests");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 const { getLogicModule } = require("@utils/getLogicModule");
 

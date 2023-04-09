@@ -1,4 +1,4 @@
-const { getDBRequest } = require("@mg/requests");
+const getDBRequest = require("@mg/requests");
 const { sendModal } = require("../../../services/slack/actions/actions");
 
 async function broadcastModal({ data }) {
