@@ -1,13 +1,8 @@
 const { USERS } = require("../mongo");
+const { checkQuery } = require("../requiredParams");
 
-function addUser({ query = {}, returns = [] }) {
-	const projection = {
-		_id: 0,
-	};
-	for (const param of returns) {
-		projection[param] = 1;
-	}
-	return USERS.insertOne(query, { projection });
+function addUser({ query = {} }) {
+	return checkQuery("addUser", query) && USERS.insertOne(query);
 }
 
 module.exports = addUser;

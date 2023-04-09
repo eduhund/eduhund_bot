@@ -1,13 +1,10 @@
 const { THREADS } = require("../mongo");
+const { checkQuery } = require("../requiredParams");
 
-function createThread({ query = {}, returns = [] }) {
-	const projection = {
-		_id: 0,
-	};
-	for (const param of returns) {
-		projection[param] = 1;
-	}
-	return THREADS.insertOne(query, { projection });
+function createThread({ query = {} }) {
+	return (
+		checkQuery("addUser", query) && THREADS.insertOne(query, { projection })
+	);
 }
 
 module.exports = createThread;
