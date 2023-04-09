@@ -9,7 +9,17 @@ const PARAMS = {
 		"blocked",
 		"lang",
 	],
-	createThread: [],
+	createThread: [
+		"userId",
+		"source",
+		"dest",
+		"role",
+		"ts",
+		"threadId",
+		"active",
+		"lastIncMessage",
+	],
+	getStudentInfo: ["email"],
 };
 
 function checkQuery(type, query) {

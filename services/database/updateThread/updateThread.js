@@ -1,14 +1,7 @@
 const { THREADS } = require("../mongo");
+const { getProjection } = require("../requiredParams");
 
 function updateThread({ query = {}, data = {}, returns = [] }) {
-	const projection = {
-		_id: 0,
-	};
-
-	for (const param of returns) {
-		projection[param] = 1;
-	}
-
 	const toUpdate = {
 		$set: data,
 	};
@@ -18,7 +11,9 @@ function updateThread({ query = {}, data = {}, returns = [] }) {
 		};
 		delete data.newMessage;
 	}
-	return THREADS.findOneAndUpdate(query, toUpdate, { projection });
+	return THREADS.findOneAndUpdate(query, toUpdate, {
+		projection: getProjection(returns),
+	});
 }
 
 module.exports = updateThread;

@@ -1,13 +1,11 @@
 const { STUDENTS } = require("../mongo");
+const { checkQuery, getProjection } = require("../requiredParams");
 
 function getStudentsList({ query = {}, returns = [] }) {
-	const projection = {
-		_id: 0,
-	};
-	for (const param of returns) {
-		projection[param] = 1;
-	}
-	return STUDENTS.find(query, { projection }).toArray();
+	return (
+		checkQuery("getStudentsList", query) &&
+		STUDENTS.find(query, { projection: getProjection(returns) }).toArray()
+	);
 }
 
 module.exports = getStudentsList;

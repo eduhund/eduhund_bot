@@ -1,3 +1,4 @@
+const { log } = require("../../../services/log/log");
 const getDBRequest = require("@mg/requests");
 const { removeSlackReaction } = require("@sl/actions/actions");
 

@@ -1,13 +1,14 @@
 const { THREADS } = require("../mongo");
+const { checkQuery, getProjection } = require("../requiredParams");
 
 function getThread({ query = {}, returns = [] }) {
-	const projection = {
-		_id: 0,
-	};
-	for (const param of returns) {
-		projection[param] = 1;
-	}
-	return THREADS.findOne(query, { projection, sort: { $natural: -1 } });
+	return (
+		checkQuery("getThread", query) &&
+		THREADS.findOne(query, {
+			projection: getProjection(returns),
+			sort: { $natural: -1 },
+		})
+	);
 }
 
 module.exports = getThread;
