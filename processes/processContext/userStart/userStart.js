@@ -1,6 +1,16 @@
 const { log } = require("../../../services/log/log");
 const getDBRequest = require("@mg/requests");
+const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
+
+const INTENTS = {
+	EXISTING: "startExist",
+	NEW: "startNew",
+	STUDENT: "startStudent",
+};
+
+const LANG = "ru";
+const DEFAULT_NAME = "студент";
 
 async function userStart({ from }) {
 	try {
@@ -13,12 +23,13 @@ async function userStart({ from }) {
 			from.email = user.email;
 			sendMessageToTelegram({
 				to: from,
-				intent: from.email ? "startStudent" : "startExist",
-				lang: "ru", //from.lang
+				intent: INTENTS[from.email ? "EXISTING" : "STUDENT"],
+				lang: LANG, //from.lang
 				data: {
-					firstName: from.firstName || "студент",
+					firstName: from.firstName || DEFAULT_NAME,
 				},
 			});
+
 			if (user?.blocked)
 				getDBRequest("updateUserInfo", {
 					query: { userId: from.userId },
@@ -27,8 +38,8 @@ async function userStart({ from }) {
 		} else {
 			sendMessageToTelegram({
 				to: from,
-				intent: "startNew",
-				lang: "ru", //from.lang
+				intent: INTENTS["NEW"],
+				lang: LANG, //from.lang
 			});
 
 			getDBRequest("addUser", {
@@ -48,15 +59,7 @@ async function userStart({ from }) {
 			});
 		}
 
-		getDBRequest("addAction", {
-			query: {
-				userId: from.userId,
-				role: "student",
-				actionCode: 1,
-				action: "Start bot",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(1, "student", from.userId));
 
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {

@@ -4,8 +4,8 @@ const { processActions } = require("../../processActions/processActions");
 const { forwardMessageToTelegram } = require("@tg/actions/actions");
 
 async function answerToStudent({ from, message }) {
-	const now = Date.now();
 	try {
+		const now = Date.now();
 		const { userId } = from;
 		const { threadId, text } = message;
 
@@ -19,14 +19,18 @@ async function answerToStudent({ from, message }) {
 
 		forwardMessageToTelegram({ to, message });
 
+		const newMessage = {
+			userId,
+			source: "slack",
+			dest: "telegram",
+			role: "teacher",
+			text,
+			ts: now,
+		};
+
 		getDBRequest("addToHistory", {
 			query: {
-				userId,
-				source: "slack",
-				dest: "telegram",
-				role: "teacher",
-				text,
-				ts: now,
+				...newMessage,
 				threadId,
 			},
 		});
@@ -39,14 +43,7 @@ async function answerToStudent({ from, message }) {
 			query: { threadId },
 			data: {
 				lastOutMessage: now,
-				newMessage: {
-					userId,
-					source: "slack",
-					dest: "telegram",
-					role: "teacher",
-					text,
-					ts: now,
-				},
+				newMessage,
 			},
 		});
 		return { OK: true, newBotContext: undefined };

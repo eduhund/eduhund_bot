@@ -1,34 +1,22 @@
 const getDBRequest = require("@mg/requests");
+const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
+const LANG = "ru";
+
 function getEmail(text) {
-	try {
-		const lowerText = text.toLowerCase();
-		return lowerText;
-	} catch {
-		return null;
-	}
+	return typeof text === "string" ? text.toLowerCase() : null;
 }
 
 async function userChangeEmailInit({ from }) {
-	const now = Date.now();
-
 	try {
 		sendMessageToTelegram({
 			to: from,
 			intent: "changeEmailInit",
-			lang: "ru", //user.lang
+			lang: LANG, //user.lang
 		});
 
-		getDBRequest("addAction", {
-			query: {
-				userId: from.userId,
-				role: "student",
-				actionCode: 4,
-				action: "Change email request",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(4, "student", from.userId));
 		return { OK: true, newBotContext: "changeEmail" };
 	} catch (e) {
 		log.warn("Error with changing user email.\n", e);
@@ -36,25 +24,15 @@ async function userChangeEmailInit({ from }) {
 	}
 }
 
-async function changeEmailFail(user) {
-	const now = Date.now();
-
+async function changeEmailFail(from) {
 	try {
 		sendMessageToTelegram({
-			to: user,
+			to: from,
 			intent: "changeEmailFail",
-			lang: "ru", //user.lang
+			lang: LANG, //user.lang
 		});
 
-		getDBRequest("addAction", {
-			query: {
-				userId: user.userId,
-				role: "student",
-				actionCode: 7,
-				action: "Change email fail",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(7, "student", from.userId));
 		return { OK: true, newBotContext: "changeEmail" };
 	} catch (e) {
 		log.warn("Error with changing user email.\n", e);
@@ -62,25 +40,15 @@ async function changeEmailFail(user) {
 	}
 }
 
-async function changeEmailError(user) {
-	const now = Date.now();
-
+async function changeEmailError(from) {
 	try {
 		sendMessageToTelegram({
-			to: user,
+			to: from,
 			intent: "changeEmailError",
-			lang: "ru", //user.lang
+			lang: LANG, //user.lang
 		});
 
-		getDBRequest("addAction", {
-			query: {
-				userId: user.userId,
-				role: "student",
-				actionCode: 6,
-				action: "Change email error",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(6, "student", from.userId));
 		return { OK: true, newBotContext: "changeEmail" };
 	} catch (e) {
 		log.warn("Error with changing user email.\n", e);
@@ -88,32 +56,22 @@ async function changeEmailError(user) {
 	}
 }
 
-async function changeEmailSuccess(user, email) {
-	const now = Date.now();
-
+async function changeEmailSuccess(from, email) {
 	try {
 		getDBRequest("updateUserInfo", {
 			query: {
-				userId: user.userId,
+				userId: from.userId,
 			},
 			data: { email },
 		});
 
 		sendMessageToTelegram({
-			to: user,
+			to: from,
 			intent: "changeEmailSuccess",
-			lang: "ru", //user.lang
+			lang: LANG, //user.lang
 		});
 
-		getDBRequest("addAction", {
-			query: {
-				userId: user.userId,
-				role: "student",
-				actionCode: 5,
-				action: "Change email success",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(5, "student", from.userId));
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {
 		log.warn("Error with changing user email.\n", e);

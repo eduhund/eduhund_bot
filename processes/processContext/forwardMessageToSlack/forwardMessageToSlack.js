@@ -3,9 +3,12 @@ const getDBRequest = require("@mg/requests");
 const { sendMessageToSlack } = require("@sl/actions/actions");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
+const channelId = process.env.SLACK_CHANNEL;
+const LANG = "ru";
+
 async function forwardMessageToSlack({ from, message }) {
-	const now = Date.now();
 	try {
+		const now = Date.now();
 		const user = await getDBRequest("getUserInfo", {
 			query: { userId: from.userId },
 		});
@@ -37,7 +40,7 @@ async function forwardMessageToSlack({ from, message }) {
 		});
 
 		const to = {
-			channelId: process.env.SLACK_CHANNEL,
+			channelId,
 			threadId: thread?.threadId,
 		};
 
@@ -47,51 +50,39 @@ async function forwardMessageToSlack({ from, message }) {
 			message,
 		});
 
+		const newMessage = {
+			userId: from.userId,
+			source: "telegram",
+			dest: "slack",
+			role: "student",
+			text: message.text,
+			ts: now,
+		};
+
 		if (!to.threadId) {
-			getDBRequest("createThread", {
-				query: {
-					userId: from.userId,
-					source: "telegram",
-					dest: "slack",
-					role: "student",
-					ts: now,
-					text: message.text,
-					threadId,
-					active: true,
-					talk: [],
-					lastIncMessage: now,
-				},
-			});
+			const newThread = {
+				...newMessage,
+				threadId,
+				active: true,
+				talk: [],
+				lastIncMessage: now,
+			};
+			getDBRequest("createThread", { query: newThread });
 
 			sendMessageToTelegram({
 				to: from,
 				intent: "newThread",
-				lang: "ru", //from.lang
+				lang: LANG, //from.lang
 			});
 		} else {
 			getDBRequest("updateThread", {
 				query: { threadId, active: true },
-				data: {
-					lastOutMessage: now,
-					newMessage: {
-						userId: from.userId,
-						source: "telegram",
-						dest: "slack",
-						role: "student",
-						text: message.text,
-						ts: now,
-					},
-				},
+				data: { lastOutMessage: now, newMessage },
 			});
 
 			getDBRequest("addToHistory", {
 				query: {
-					userId: from.userId,
-					source: "telegram",
-					dest: "slack",
-					role: "student",
-					ts: now,
-					text: message.text,
+					...newMessage,
 					threadId,
 				},
 			});

@@ -1,26 +1,19 @@
 const { log } = require("../../../services/log/log");
 const getDBRequest = require("@mg/requests");
+const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
+
+const LANG = "ru";
 
 async function userHelp({ from }) {
 	try {
-		const now = Date.now();
-
 		sendMessageToTelegram({
 			to: from,
 			intent: "help",
-			lang: "ru", //from.lang
+			lang: LANG, //from.lang
 		});
 
-		getDBRequest("addAction", {
-			query: {
-				userId: from.userId,
-				role: "student",
-				actionCode: 2,
-				action: "Request help",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(2, "student", from.userId));
 
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {

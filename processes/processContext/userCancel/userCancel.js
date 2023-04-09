@@ -1,17 +1,18 @@
 const { log } = require("../../../services/log/log");
-
 const {
 	sendMessageToTelegram,
 	deleteTelegramMessage,
 	answerTelegramCallback,
 } = require("@tg/actions/actions");
 
+const LANG = "ru";
+
 async function userCancel({ from, message }) {
 	try {
 		sendMessageToTelegram({
 			to: from,
 			intent: "userCancel",
-			lang: "ru", //from.lang
+			lang: LANG, //from.lang
 		});
 		deleteTelegramMessage({
 			userId: from.userId,
