@@ -1,15 +1,12 @@
 function broadcastModal({ triggerId, modules }) {
-	const options = [];
-	for (const module of modules) {
-		options.push({
-			text: {
-				type: "plain_text",
-				text: module.name,
-				emoji: true,
-			},
-			value: module.code,
-		});
-	}
+	const options = modules.map((module) => ({
+		text: {
+			type: "plain_text",
+			text: module.name,
+			emoji: true,
+		},
+		value: module.code,
+	}));
 
 	const modal = {
 		type: "modal",
@@ -77,12 +74,10 @@ function broadcastModal({ triggerId, modules }) {
 		],
 	};
 
-	const message = {
+	return {
 		trigger_id: triggerId,
-		view: { ...modal },
+		view: modal,
 	};
-
-	return message;
 }
 
 module.exports = { broadcastModal };

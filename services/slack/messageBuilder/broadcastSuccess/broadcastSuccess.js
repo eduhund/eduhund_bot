@@ -1,5 +1,5 @@
 function broadcastSuccess({ from, message, data }) {
-	const form = {
+	return {
 		channel: process.env.SLACK_CHANNEL,
 		text: `${from.username} вещает студентам`,
 		blocks: [
@@ -22,8 +22,6 @@ function broadcastSuccess({ from, message, data }) {
 			},
 		],
 	};
-
-	return form;
 }
 
 module.exports = { broadcastSuccess };

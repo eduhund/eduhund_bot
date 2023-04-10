@@ -1,8 +1,7 @@
 const getDBRequest = require("@mg/requests");
 const { sendModal } = require("../../../services/slack/actions/actions");
 
-async function dmModal({ data }) {
-	const { triggerId } = data;
+async function dmModal({ data: { triggerId } }) {
 	const users = await getDBRequest("getUsersList", {
 		query: { email: { $exists: true } },
 	});

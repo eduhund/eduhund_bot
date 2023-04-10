@@ -7,10 +7,15 @@ const CHANNEL_ID = process.env.SLACK_CHANNEL;
 
 async function closeThread({ from, message }) {
 	try {
+		if (!message.threadId) {
+			message.threadId = message.date;
+		}
 		const { channelId, threadId } = message;
+
 		if (channelId !== CHANNEL_ID) {
 			return undefined;
 		}
+
 		const query = { threadId, active: true };
 		const data = { active: false };
 		const newThreadStatus = await getDBRequest("updateThread", {

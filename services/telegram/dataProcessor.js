@@ -3,14 +3,11 @@ const { getTelegramFileUrl } = require("../../utils/getFileUrl");
 
 async function incomingData(data) {
 	try {
-		const image = data.photo || data.sticker;
-		const document = data.document;
-		const video = data.video || data.video_note;
-		const audio = data.audio || data.voice;
-		const imageUrl = image ? await getTelegramFileUrl(image) : undefined;
-		const docUrl = document ? await getTelegramFileUrl(document) : undefined;
-		const videoUrl = video ? await getTelegramFileUrl(video) : undefined;
-		const audioUrl = audio ? await getTelegramFileUrl(audio) : undefined;
+		const { photo, sticker, document, video, video_note, audio, voice } = data;
+		const imageUrl =
+			photo || sticker ? await getTelegramFileUrl(photo || sticker) : undefined;
+		const media = video || video_note || audio || voice || document;
+		const docUrl = media ? await getTelegramFileUrl(media) : undefined;
 		return {
 			from: {
 				userId: data?.from?.id,
@@ -27,7 +24,7 @@ async function incomingData(data) {
 				text: data?.text || data?.caption || data?.data || " ",
 				att: {
 					image: imageUrl,
-					document: docUrl || videoUrl || audioUrl,
+					document: docUrl,
 				},
 			},
 		};

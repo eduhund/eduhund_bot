@@ -1,5 +1,5 @@
 function dmSuccess({ from, message, data }) {
-	const form = {
+	return {
 		channel: process.env.SLACK_CHANNEL,
 		text: `${from.username} пишет студентам в личку`,
 		blocks: [
@@ -24,8 +24,6 @@ function dmSuccess({ from, message, data }) {
 			},
 		],
 	};
-
-	return form;
 }
 
 module.exports = { dmSuccess };

@@ -1,13 +1,13 @@
 const { log } = require("../../../services/log/log");
 const getDBRequest = require("@mg/requests");
+const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToSlack } = require("@sl/actions/actions");
 const { forwardMessageToTelegram } = require("@tg/actions/actions");
 
 async function dmSubmit({ from, message, data }) {
-	const now = Date.now();
-
 	try {
 		const { usersList } = data;
+
 		const userIds = usersList.map((userItem) => userItem.value);
 		const userEmails = usersList.map((userItem) => userItem.text.text);
 
@@ -26,15 +26,7 @@ async function dmSubmit({ from, message, data }) {
 			data: { counter, users: userEmails },
 		});
 
-		getDBRequest("addAction", {
-			query: {
-				userId: from.userId,
-				role: "teacher",
-				actionCode: 11,
-				action: "Send direct message to some users",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(11, "teacher", from.userId));
 
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {

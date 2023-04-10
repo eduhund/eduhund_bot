@@ -1,5 +1,5 @@
 function reopenThreadManual({ from, message }) {
-	const form = {
+	return {
 		channel: process.env.SLACK_CHANNEL,
 		text: "Тред снова открыт",
 		thread_ts: message.threadId,
@@ -15,8 +15,6 @@ function reopenThreadManual({ from, message }) {
 			},
 		],
 	};
-
-	return form;
 }
 
 module.exports = { reopenThreadManual };

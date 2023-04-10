@@ -1,26 +1,20 @@
 function sliceIntoChunks(arr, chunkSize) {
-	const res = [];
-	for (let i = 0; i < arr.length; i += chunkSize) {
-		const chunk = arr.slice(i, i + chunkSize);
-		res.push(chunk);
-	}
-	return res;
+	return Array.from({ length: Math.ceil(arr.length / chunkSize) }, (_, i) =>
+		arr.slice(i * chunkSize, i * chunkSize + chunkSize)
+	);
 }
 
 function dmModal({ triggerId, users }) {
-	const options = [];
-	for (const user of users) {
-		if (user.email && user.userId) {
-			options.push({
-				text: {
-					type: "plain_text",
-					text: user.email,
-					emoji: true,
-				},
-				value: user.userId.toString(),
-			});
-		}
-	}
+	const options = users
+		.filter((user) => user.email && user.userId)
+		.map((user) => ({
+			text: {
+				type: "plain_text",
+				text: `${user.firstName} ${user.lastName} | ${user.email}`,
+				emoji: true,
+			},
+			value: user.userId.toString(),
+		}));
 
 	const groups = sliceIntoChunks(options, 100);
 
@@ -100,12 +94,10 @@ function dmModal({ triggerId, users }) {
 		],
 	};
 
-	const message = {
+	return {
 		trigger_id: triggerId,
-		view: { ...modal },
+		view: modal,
 	};
-
-	return message;
 }
 
 module.exports = { dmModal };

@@ -4,15 +4,17 @@ const {
 } = require("@sl/messageBuilder/messageBuilder");
 const { web } = require("@sl/slack");
 
+async function openModal(modalBuilder, modalData) {
+	await web.views.open(modalBuilder(modalData));
+}
+
 async function sendModal({ triggerId, type, data }) {
 	switch (type) {
 		case "broadcast":
-			const { modules } = data;
-			await web.views.open(broadcastModal({ triggerId, modules }));
+			await openModal(broadcastModal, { triggerId, modules: data.modules });
 			break;
 		case "dm":
-			const { users } = data;
-			await web.views.open(dmModal({ triggerId, users }));
+			await openModal(dmModal, { triggerId, users: data.users });
 			break;
 	}
 }

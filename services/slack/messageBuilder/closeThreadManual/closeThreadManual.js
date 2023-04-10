@@ -1,5 +1,5 @@
 function closeThreadManual({ from, message }) {
-	const form = {
+	return {
 		channel: process.env.SLACK_CHANNEL,
 		text: "Тред закрыт",
 		thread_ts: message.threadId,
@@ -15,8 +15,6 @@ function closeThreadManual({ from, message }) {
 			},
 		],
 	};
-
-	return form;
 }
 
 module.exports = { closeThreadManual };

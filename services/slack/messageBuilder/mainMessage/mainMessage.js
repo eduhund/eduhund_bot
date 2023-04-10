@@ -1,13 +1,11 @@
 function mainMessage({ from, to, message }) {
-	const informerMessage = `${from.firstName} ${from.lastName}: ${message.text}`;
-	var userInfo = `*<https://t.me/${from.username}|${from.firstName} ${from.lastName}>*`;
-	if (from.email) {
-		userInfo += ` / ${from.email}`;
-	}
-	if (from.modules) {
-		userInfo += ` / ${from.modules.join(", ")}`;
-	}
-	const form = {
+	const { email, username, firstName, lastName, modules } = from;
+	const { text, att = {} } = message;
+	const informerMessage = `${firstName} ${lastName}: ${text}`;
+	const userInfo = `*<https://t.me/${username}|${firstName} ${lastName}>*${
+		email ? ` / ${email}` : ""
+	}${modules ? ` / ${modules.join(", ")}` : ""}`;
+	return {
 		channel: to.channelId,
 		text: informerMessage,
 		blocks: [
@@ -24,32 +22,32 @@ function mainMessage({ from, to, message }) {
 				type: "section",
 				text: {
 					type: "plain_text",
-					text: message.text || " ",
+					text: text || " ",
 					emoji: true,
 				},
 			},
+			...(att?.image
+				? [
+						{
+							type: "image",
+							image_url: att.image,
+							alt_text: "An incredibly cute kitten.",
+						},
+				  ]
+				: []),
+			...(att?.document
+				? [
+						{
+							type: "section",
+							text: {
+								type: "mrkdwn",
+								text: `*<${att.document}|Посмотреть вложение>*`,
+							},
+						},
+				  ]
+				: []),
 		],
 	};
-
-	if (message.att?.image) {
-		form.blocks.push({
-			type: "image",
-			image_url: message.att.image,
-			alt_text: "An incredibly cute kitten.",
-		});
-	}
-
-	if (message.att?.document) {
-		form.blocks.push({
-			type: "section",
-			text: {
-				type: "mrkdwn",
-				text: `*<${message.att.document}|Посмотреть вложение>*`,
-			},
-		});
-	}
-
-	return form;
 }
 
 module.exports = { mainMessage };

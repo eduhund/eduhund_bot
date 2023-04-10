@@ -17,7 +17,7 @@ async function answerToStudent({ from, message }) {
 			userId: thread?.userId,
 		};
 
-		forwardMessageToTelegram({ to, message });
+		await forwardMessageToTelegram({ to, message });
 
 		const newMessage = {
 			userId,
@@ -28,7 +28,7 @@ async function answerToStudent({ from, message }) {
 			ts: now,
 		};
 
-		getDBRequest("addToHistory", {
+		await getDBRequest("addToHistory", {
 			query: {
 				...newMessage,
 				threadId,
@@ -36,10 +36,10 @@ async function answerToStudent({ from, message }) {
 		});
 
 		if (!thread.active) {
-			processActions("sReopenThread", { from, message });
+			await processActions("sReopenThread", { from, message });
 		}
 
-		getDBRequest("updateThread", {
+		await getDBRequest("updateThread", {
 			query: { threadId },
 			data: {
 				lastOutMessage: now,

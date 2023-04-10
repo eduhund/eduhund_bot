@@ -1,3 +1,4 @@
+const { log } = require("../../../services/log/log");
 const getDBRequest = require("@mg/requests");
 const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");

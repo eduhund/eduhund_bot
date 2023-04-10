@@ -1,27 +1,23 @@
 const { log } = require("../../../services/log/log");
 const getDBRequest = require("@mg/requests");
+const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToSlack } = require("@sl/actions/actions");
 const { forwardMessageToTelegram } = require("@tg/actions/actions");
 
 async function broadcastSubmit({ from, message, data }) {
-	const now = Date.now();
-
 	try {
-		const { modulesList } = data;
-		const moduleIds = modulesList.map((moduleItem) => moduleItem.value);
+		const moduleIds = data.modulesList.map(({ value }) => value);
 
-		const users = [];
-
-		for (const moduleId of moduleIds) {
-			const students = await getDBRequest("getStudentsList", {
-				query: { [`modules.${moduleId}`]: { $exists: true } },
-				returns: ["email"],
-			});
-			const emails = students.map((item) => item.email);
-			users.push(...emails);
-		}
-
-		const finalList = [...new Set(users)];
+		const users = await Promise.all(
+			moduleIds.map(async (moduleId) => {
+				const students = await getDBRequest("getStudentsList", {
+					query: { [`modules.${moduleId}`]: { $exists: true } },
+					returns: ["email"],
+				});
+				return students.map(({ email }) => email);
+			})
+		);
+		const finalList = [...new Set(users.flat())];
 
 		let counter = 0;
 
@@ -40,21 +36,9 @@ async function broadcastSubmit({ from, message, data }) {
 
 		message.type = "broadcastSuccess";
 
-		sendMessageToSlack({
-			from,
-			message,
-			data: { counter },
-		});
+		sendMessageToSlack({ from, message, data: { counter } });
 
-		getDBRequest("addAction", {
-			query: {
-				userId: from.userId,
-				role: "teacher",
-				actionCode: 10,
-				action: "Send message to many users",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(10, "teacher", from.userId));
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {
 		log.warn("Error with processing broadcasting to students.\n", e);
