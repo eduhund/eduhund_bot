@@ -1,13 +1,14 @@
 const { log } = require("../../../services/log/log");
 const getDBRequest = require("@mg/requests");
+const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToSlack, addSlackReaction } = require("@sl/actions/actions");
 
-async function closeThread({ from, message }) {
-	const now = Date.now();
+const CHANNEL_ID = process.env.SLACK_CHANNEL;
 
+async function closeThread({ from, message }) {
 	try {
 		const { channelId, threadId } = message;
-		if (message.channelId !== process.env.SLACK_CHANNEL) {
+		if (channelId !== CHANNEL_ID) {
 			return undefined;
 		}
 		const query = { threadId, active: true };
@@ -34,15 +35,7 @@ async function closeThread({ from, message }) {
 			threadId,
 		});
 
-		getDBRequest("addAction", {
-			query: {
-				userId: from.userId,
-				role: "teacher",
-				actionCode: 12,
-				action: "Close thread",
-				ts: now,
-			},
-		});
+		getDBRequest("addAction", getActionQuery(12, "teacher", from.userId));
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {
 		log.warn("Error with closing thread.\n", e);
