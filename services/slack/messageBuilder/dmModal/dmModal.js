@@ -10,7 +10,7 @@ function dmModal({ triggerId, users }) {
 		.map((user) => ({
 			text: {
 				type: "plain_text",
-				text: `${user.firstName} ${user.lastName} | ${user.email}`,
+				text: `${user.firstName} ${user.lastName || ""} | ${user.email}`,
 				emoji: true,
 			},
 			value: user.userId.toString(),

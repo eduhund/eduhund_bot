@@ -7,7 +7,8 @@ function telegramListenerRun() {
 	bot.command("start", async (ctx) => {
 		const data = await incomingData(ctx.message);
 		const context = "tStart";
-		processContext(context, data);
+		const response = await processContext(context, data);
+		ctx.session = response?.newBotContext;
 	});
 
 	bot.command("help", async (ctx) => {

@@ -57,11 +57,16 @@ async function userStart({ from }) {
 					lang: from.lang,
 				},
 			});
+
+			sendMessageToTelegram({
+				to: from,
+				intent: "changeEmailInit",
+				lang: LANG, //user.lang
+			});
 		}
 
 		getDBRequest("addAction", getActionQuery(1, "student", from.userId));
-
-		return { OK: true, newBotContext: undefined };
+		return { OK: true, newBotContext: from.email ? undefined : "changeEmail" };
 	} catch (e) {
 		log.warn("Error while processing user start.\n", e);
 		return { OK: false, newBotContext: undefined };

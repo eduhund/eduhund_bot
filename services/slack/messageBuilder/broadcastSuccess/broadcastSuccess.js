@@ -7,7 +7,9 @@ function broadcastSuccess({ from, message, data }) {
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: `<@${from.userId}> отправил_a сообщение ${data.counter} студентам`,
+					text: `<@${from.userId}> отправил_a сообщение ${data.counter} ${
+						data.counter === 1 ? "студенту" : "студентам"
+					}`,
 				},
 			},
 			{

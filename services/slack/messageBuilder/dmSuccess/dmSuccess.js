@@ -7,9 +7,9 @@ function dmSuccess({ from, message, data }) {
 				type: "section",
 				text: {
 					type: "mrkdwn",
-					text: `<@${from.userId}> отправил_a сообщение ${
-						data.counter
-					} студентам: ${data.users.join(", ")}`,
+					text: `<@${from.userId}> отправил_a сообщение ${data.counter} ${
+						data.counter === 1 ? "студенту" : "студентам"
+					}: ${data.users.join(", ")}`,
 				},
 			},
 			{
