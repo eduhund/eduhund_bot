@@ -14,7 +14,7 @@ function getDateRange() {
 
 async function catReport() {
 	try {
-		const { start, until } = getDateRange;
+		const { start, until } = getDateRange();
 		const actions = await getDBRequest("getActions", {
 			query: {
 				code: 8,
