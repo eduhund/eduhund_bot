@@ -5,21 +5,23 @@ const {
 	dmSuccess,
 	closeThreadManual,
 	reopenThreadManual,
+	catReport,
 } = require("@sl/messageBuilder/messageBuilder");
 
 const { web } = require("@sl/slack");
 
 async function sendMessageToSlack({ from, to, message, data }) {
 	const messageType = {
-		broadcastSuccess: broadcastSuccess,
-		dmSuccess: dmSuccess,
-		closeThreadManual: closeThreadManual,
-		reopenThreadManual: reopenThreadManual,
+		broadcastSuccess,
+		dmSuccess,
+		closeThreadManual,
+		reopenThreadManual,
+		catReport,
 	};
 
 	const messageFn = messageType[message.type];
 	if (messageFn) {
-		web.chat.postMessage(messageFn({ from, message, data }));
+		web.chat.postMessage(messageFn({ from, to, message, data }));
 	} else {
 		if (!to?.threadId) {
 			const response = await web.chat.postMessage(

@@ -10,6 +10,7 @@ const addAction = require("./addAction/addAction");
 const getModulesList = require("./getModulesList/getModulesList");
 const getStudentsList = require("./getStudentsList/getStudentsList");
 const getUsersList = require("./getUsersList/getUsersList");
+const getActions = require("./getActions/getActions");
 
 const REQUESTS = {
 	getUserInfo,
@@ -24,6 +25,7 @@ const REQUESTS = {
 	getModulesList,
 	getStudentsList,
 	getUsersList,
+	getActions,
 };
 
 function getDBRequest(type, params) {

@@ -6,6 +6,7 @@ const bot = require("@tg/telegram");
 const slack = require("@sl/slack");
 const server = require("@ex/express");
 const mongo = require("@mg/mongo");
+const cron = require("./services/schedule/cron");
 const { slackListenerRun } = require("@sl/listener");
 const { telegramListenerRun } = require("@tg/listener");
 
@@ -17,6 +18,7 @@ async function start() {
 		await slack.start();
 		await slackListenerRun();
 		await server.start();
+		cron.init();
 		log.info("All systems running. Let's rock!");
 	} catch (e) {
 		log.error("Hewston, we have a problem!\n", e);
