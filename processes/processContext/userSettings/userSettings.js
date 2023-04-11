@@ -10,7 +10,7 @@ async function userSettings({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "settings",
-			lang: LANG, //from.lang
+			lang: from.lang || LANG,
 		});
 
 		getDBRequest("addAction", getActionQuery(3, "student", from.userId));

@@ -1,5 +1,5 @@
 const ru = require("./ru.json");
-const en = {};
+const en = require("./en.json");
 
 function randomInteger(min, max) {
 	return Math.floor(min + Math.random() * (max - min + 1));

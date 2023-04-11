@@ -12,7 +12,7 @@ async function userCancel({ from, message }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "userCancel",
-			lang: LANG, //from.lang
+			lang: from.lang || LANG,
 		});
 		deleteTelegramMessage({
 			userId: from.userId,

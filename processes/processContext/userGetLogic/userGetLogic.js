@@ -13,7 +13,7 @@ async function userGetLogic({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "userLogicModule",
-			lang: LANG, //from.lang
+			lang: from.lang || LANG,
 			data: {
 				url,
 			},
@@ -29,7 +29,7 @@ async function userGetLogic({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "error",
-			lang: LANG, //from.lang
+			lang: from.lang || LANG,
 		});
 		return { OK: false, newBotContext: undefined };
 	}

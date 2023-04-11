@@ -8,7 +8,7 @@ async function otherModules({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "otherModules",
-			lang: LANG, //from.lang
+			lang: from.lang || LANG,
 		});
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {
@@ -16,7 +16,7 @@ async function otherModules({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "error",
-			lang: LANG, //from.lang
+			lang: from.lang || LANG,
 		});
 		return { OK: false, newBotContext: undefined };
 	}

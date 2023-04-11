@@ -14,9 +14,9 @@ async function sendMessageToTelegram({ to, intent, lang, data, params = {} }) {
 	if (intent.startsWith("start")) {
 		options.reply_markup = {
 			keyboard: [
-				[{ text: "• погладить котика •" }],
-				[{ text: "• узнать про другие задачники •" }],
-				[{ text: "• забрать сертификат •" }],
+				[{ text: getPhrase(lang, "catKB") }],
+				[{ text: getPhrase(lang, "otherModulesKB") }],
+				[{ text: getPhrase(lang, "diplomaKB") }],
 			],
 			is_persistent: true,
 			resize_keyboard: true,

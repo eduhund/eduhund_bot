@@ -72,7 +72,7 @@ async function forwardMessageToSlack({ from, message }) {
 			sendMessageToTelegram({
 				to: from,
 				intent: "newThread",
-				lang: LANG, //from.lang
+				lang: from.lang || LANG,
 			});
 		} else {
 			getDBRequest("updateThread", {

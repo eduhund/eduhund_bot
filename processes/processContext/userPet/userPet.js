@@ -14,7 +14,7 @@ async function userPet({ from }) {
 		await sendMessageToTelegram({
 			to: from,
 			intent: "cat",
-			lang: LANG, //lang
+			lang: from.lang || LANG,
 		});
 
 		return { OK: true, newBotContext: undefined };
@@ -23,7 +23,7 @@ async function userPet({ from }) {
 		await sendMessageToTelegram({
 			to: from,
 			intent: "error",
-			lang: LANG, //lang
+			lang: from.lang || LANG,
 		});
 		return { OK: false, newBotContext: undefined };
 	}

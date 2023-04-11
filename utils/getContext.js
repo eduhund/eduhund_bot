@@ -8,16 +8,19 @@ function getTelegramContext(message, botContext) {
 				return "tManual";
 		}
 	}
-	if (text === "• погладить котика •") {
+	if (text === "• погладить котика •" || text === "• meow •") {
 		return "tMeow";
 	}
-	if (text === "• узнать про другие задачники •") {
+	if (
+		text === "• узнать про другие задачники •" ||
+		text === "• other taskbooks •"
+	) {
 		return "tOtherModules";
 	}
 	if (text === "• сменить email •") {
 		return "tChangeMailInit";
 	}
-	if (text === "• забрать сертификат •") {
+	if (text === "• забрать сертификат •" || text === "• get my diploma •") {
 		return "tGetDiploma";
 	}
 	if (text.includes("задачник по логике")) {
