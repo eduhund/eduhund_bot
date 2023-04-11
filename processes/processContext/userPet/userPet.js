@@ -3,8 +3,6 @@ const getDBRequest = require("@mg/requests");
 const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-const LANG = "ru";
-
 async function userPet({ from }) {
 	try {
 		const { userId, lang } = from;
@@ -14,7 +12,7 @@ async function userPet({ from }) {
 		await sendMessageToTelegram({
 			to: from,
 			intent: "cat",
-			lang: lang || LANG,
+			lang: lang,
 		});
 
 		return { OK: true, newBotContext: undefined };
@@ -23,7 +21,7 @@ async function userPet({ from }) {
 		await sendMessageToTelegram({
 			to: from,
 			intent: "error",
-			lang: lang || LANG,
+			lang: lang,
 		});
 		return { OK: false, newBotContext: undefined };
 	}

@@ -1,12 +1,12 @@
 const ru = require("./ru.json");
 const en = require("./en.json");
 
+const langs = { ru, en };
+
+const DEFAULT_LANG = process.env.DEFAULT_LANG || "en";
+
 function randomInteger(min, max) {
 	return Math.floor(min + Math.random() * (max - min + 1));
-}
-
-function getDict(lang) {
-	return lang === "en" ? en : ru;
 }
 
 function modifyPhrase(string, data) {
@@ -23,7 +23,7 @@ function modifyPhrase(string, data) {
 }
 
 function getPhrase(lang, intent, data = {}) {
-	const selLang = getDict(lang);
+	const selLang = langs[lang] || DEFAULT_LANG;
 	let selPhrase = selLang[intent];
 
 	if (!selPhrase) {

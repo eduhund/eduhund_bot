@@ -3,14 +3,12 @@ const getDBRequest = require("@mg/requests");
 const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-const LANG = "ru";
-
 async function userHelp({ from }) {
 	try {
 		sendMessageToTelegram({
 			to: from,
 			intent: "help",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 
 		getDBRequest("addAction", getActionQuery(2, "student", from.userId));

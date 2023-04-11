@@ -4,7 +4,6 @@ const { sendMessageToSlack } = require("@sl/actions/actions");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
 const channelId = process.env.SLACK_CHANNEL;
-const LANG = "ru";
 
 async function forwardMessageToSlack({ from, message }) {
 	try {
@@ -72,7 +71,7 @@ async function forwardMessageToSlack({ from, message }) {
 			sendMessageToTelegram({
 				to: from,
 				intent: "newThread",
-				lang: from.lang || LANG,
+				lang: from.lang,
 			});
 		} else {
 			getDBRequest("updateThread", {

@@ -1,14 +1,12 @@
 const { log } = require("../../../services/log/log");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-const LANG = "ru";
-
 async function otherModules({ from }) {
 	try {
 		sendMessageToTelegram({
 			to: from,
 			intent: "otherModules",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 		return { OK: true, newBotContext: undefined };
 	} catch (e) {
@@ -16,7 +14,7 @@ async function otherModules({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "error",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 		return { OK: false, newBotContext: undefined };
 	}

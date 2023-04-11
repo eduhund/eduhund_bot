@@ -5,14 +5,12 @@ const {
 	answerTelegramCallback,
 } = require("@tg/actions/actions");
 
-const LANG = "ru";
-
 async function userCancel({ from, message }) {
 	try {
 		sendMessageToTelegram({
 			to: from,
 			intent: "userCancel",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 		deleteTelegramMessage({
 			userId: from.userId,

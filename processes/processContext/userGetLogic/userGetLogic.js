@@ -4,8 +4,6 @@ const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 const { getLogicModule } = require("@utils/getLogicModule");
 
-const LANG = "ru";
-
 async function userGetLogic({ from }) {
 	try {
 		const url = await getLogicModule(from.userId);
@@ -13,7 +11,7 @@ async function userGetLogic({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "userLogicModule",
-			lang: from.lang || LANG,
+			lang: from.lang,
 			data: {
 				url,
 			},
@@ -29,7 +27,7 @@ async function userGetLogic({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "error",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 		return { OK: false, newBotContext: undefined };
 	}

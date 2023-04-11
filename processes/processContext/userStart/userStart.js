@@ -9,7 +9,6 @@ const INTENTS = {
 	STUDENT: "startStudent",
 };
 
-const LANG = "ru";
 const DEFAULT_NAME = "студент";
 
 async function userStart({ from }) {
@@ -24,7 +23,7 @@ async function userStart({ from }) {
 			sendMessageToTelegram({
 				to: from,
 				intent: INTENTS[from.email ? "EXISTING" : "STUDENT"],
-				lang: from.lang || LANG,
+				lang: from.lang,
 				data: {
 					firstName: from.firstName || DEFAULT_NAME,
 				},
@@ -39,7 +38,7 @@ async function userStart({ from }) {
 			sendMessageToTelegram({
 				to: from,
 				intent: INTENTS["NEW"],
-				lang: from.lang || LANG,
+				lang: from.lang,
 			});
 
 			getDBRequest("addUser", {
@@ -61,7 +60,7 @@ async function userStart({ from }) {
 			sendMessageToTelegram({
 				to: from,
 				intent: "changeEmailInit",
-				lang: from.lang || LANG,
+				lang: from.lang,
 			});
 		}
 

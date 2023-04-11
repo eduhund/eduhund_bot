@@ -3,8 +3,6 @@ const getDBRequest = require("@mg/requests");
 const getActionQuery = require("../../../utils/actionsQueries");
 const { sendMessageToTelegram } = require("@tg/actions/actions");
 
-const LANG = "ru";
-
 function getEmail(text) {
 	return typeof text === "string" ? text.toLowerCase() : null;
 }
@@ -14,7 +12,7 @@ async function userChangeEmailInit({ from }) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "changeEmailInit",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 
 		getDBRequest("addAction", getActionQuery(4, "student", from.userId));
@@ -30,7 +28,7 @@ async function changeEmailFail(from) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "changeEmailFail",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 
 		getDBRequest("addAction", getActionQuery(7, "student", from.userId));
@@ -46,7 +44,7 @@ async function changeEmailError(from) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "changeEmailError",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 
 		getDBRequest("addAction", getActionQuery(6, "student", from.userId));
@@ -69,7 +67,7 @@ async function changeEmailSuccess(from, email) {
 		sendMessageToTelegram({
 			to: from,
 			intent: "changeEmailSuccess",
-			lang: from.lang || LANG,
+			lang: from.lang,
 		});
 
 		getDBRequest("addAction", getActionQuery(5, "student", from.userId));
