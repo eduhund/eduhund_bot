@@ -1,4 +1,4 @@
-const { web } = require("@sl/slack");
+const { web } = require("../../slack");
 
 function reactionContext(type) {
 	switch (type) {

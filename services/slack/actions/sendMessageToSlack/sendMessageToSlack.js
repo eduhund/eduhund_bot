@@ -6,9 +6,9 @@ const {
 	closeThreadManual,
 	reopenThreadManual,
 	catReport,
-} = require("@sl/messageBuilder/messageBuilder");
+} = require("../../messageBuilder/messageBuilder");
 
-const { web } = require("@sl/slack");
+const { web } = require("../../slack");
 
 async function sendMessageToSlack({ from, to, message, data }) {
 	const messageType = {

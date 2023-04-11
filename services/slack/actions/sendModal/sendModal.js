@@ -1,8 +1,8 @@
 const {
 	broadcastModal,
 	dmModal,
-} = require("@sl/messageBuilder/messageBuilder");
-const { web } = require("@sl/slack");
+} = require("../../messageBuilder/messageBuilder");
+const { web } = require("../../slack");
 
 async function openModal(modalBuilder, modalData) {
 	await web.views.open(modalBuilder(modalData));

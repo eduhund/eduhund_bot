@@ -1,6 +1,8 @@
 const { log } = require("../../../services/log/log");
-const getDBRequest = require("@mg/requests");
-const { sendMessageToSlack } = require("@sl/actions/actions");
+const getDBRequest = require("../../../services/database/requests");
+const {
+	sendMessageToSlack,
+} = require("../../../services/slack/actions/actions");
 
 const CHANNEL_ID = process.env.SLACK_CHANNEL;
 
@@ -10,10 +12,10 @@ function getDateRange() {
 	return { start, until };
 }
 
-function catReport() {
+async function catReport() {
 	try {
 		const { start, until } = getDateRange;
-		const actions = getDBRequest("getActions", {
+		const actions = await getDBRequest("getActions", {
 			query: {
 				code: 8,
 				ts: { $gt: start, $lt: until },
@@ -25,9 +27,11 @@ function catReport() {
 		const message = { type: "catReport" };
 		const data = { count: actions.length };
 
-		sendMessageToSlack("catReport", { to, message, data });
-	} catch {
-		log.warn("Error with cat reporting");
+		await sendMessageToSlack({ to, message, data });
+		return { OK: true };
+	} catch (e) {
+		log.warn("Error with cat reporting: ", e);
+		return { OK: false };
 	}
 }
 
