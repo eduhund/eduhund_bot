@@ -4,7 +4,6 @@ log4js.configure({
 	appenders: {
 		out: { type: "stdout" },
 		file: { type: "file", filename: "./logs/eduhund-bot.log" },
-		errFile: { type: "file", filename: "./logs/eduhund-bot-errors.log" },
 		slack: {
 			type: "@log4js-node/slack",
 			token: process.env.SLACK_BOT_TOKEN,
@@ -14,7 +13,7 @@ log4js.configure({
 	},
 	categories: {
 		default: { appenders: ["out"], level: "debug" },
-		e: { appenders: ["out", "errFile", "slack"], level: "warn" },
+		e: { appenders: ["out", "slack"], level: "warn" },
 		"e.test": { appenders: ["file"], level: "debug" },
 		"e.prod": { appenders: ["file"], level: "debug" },
 	},
