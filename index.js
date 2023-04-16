@@ -1,12 +1,12 @@
 require("dotenv").config();
 require("module-alias/register");
-const { log } = require("./services/log/log");
+const { log } = require("./src/services/log/log");
 
 const bot = require("@tg/telegram");
 const slack = require("@sl/slack");
 const server = require("@ex/express");
 const mongo = require("@mg/mongo");
-const cron = require("./services/schedule/cron");
+const cron = require("./src/services/schedule/cron");
 const { slackListenerRun } = require("@sl/listener");
 const { telegramListenerRun } = require("@tg/listener");
 
