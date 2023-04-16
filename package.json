@@ -1,6 +1,6 @@
 {
 	"name": "eduhund_bot",
-	"version": "0.1.0",
+	"version": "3.0.0",
 	"description": "Help bot for Eduhund education platform",
 	"main": "index.js",
 	"scripts": {
@@ -24,13 +24,13 @@
 		"telegraf": "^4.11.2"
 	},
 	"_moduleAliases": {
-		"@tg": "services/telegram",
-		"@sl": "services/slack",
-		"@mg": "services/database",
-		"@ex": "services/express",
-		"@processes": "processes",
-		"@utils": "utils",
-		"@assets": "assets"
+		"@tg": "src/services/telegram",
+		"@sl": "src/services/slack",
+		"@mg": "src/services/database",
+		"@ex": "src/services/express",
+		"@processes": "src/processes",
+		"@utils": "src/utils",
+		"@assets": "src/assets"
 	},
 	"devDependencies": {
 		"jest": "^29.5.0"
