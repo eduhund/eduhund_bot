@@ -3,6 +3,11 @@ const log4js = require("log4js");
 log4js.configure({
 	appenders: {
 		out: { type: "stdout" },
+		outLevelFilter: {
+			type: "logLevelFilter",
+			level: "warn",
+			appender: "out",
+		},
 		file: { type: "file", filename: "./logs/eduhund-bot.log" },
 		slack: {
 			type: "@log4js-node/slack",
@@ -10,12 +15,22 @@ log4js.configure({
 			channel_id: process.env.SLACK_CHANNEL_ID,
 			username: "Bot error handler",
 		},
+		slackLevelFilter: {
+			type: "logLevelFilter",
+			level: "warn",
+			appender: "slack",
+		},
 	},
 	categories: {
 		default: { appenders: ["out"], level: "debug" },
-		e: { appenders: ["out", "slack"], level: "warn" },
-		"e.test": { appenders: ["file"], level: "debug" },
-		"e.prod": { appenders: ["file"], level: "debug" },
+		test: {
+			appenders: ["outLevelFilter", "file", "slackLevelFilter"],
+			level: "debug",
+		},
+		prod: {
+			appenders: ["outLevelFilter", "file", "slackLevelFilter"],
+			level: "debug",
+		},
 	},
 });
 
