@@ -3,6 +3,7 @@
 **/.DS_Store
 
 tests
+logs
 
 node_modules
 .env

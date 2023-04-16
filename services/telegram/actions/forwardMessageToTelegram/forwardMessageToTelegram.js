@@ -1,3 +1,5 @@
+const { log } = require("../../../../services/log/log");
+
 const { bot } = require("@tg/telegram");
 
 async function forwardMessageToTelegram({ to, message }) {
@@ -33,6 +35,12 @@ async function forwardMessageToTelegram({ to, message }) {
 				});
 				break;
 		}
+		log.debug("Telegram — Message has been forwarded: ", {
+			to: userId,
+			text,
+			url,
+			caption,
+		});
 	}
 }
 

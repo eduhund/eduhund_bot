@@ -1,5 +1,24 @@
 const log4js = require("log4js");
-const log = log4js.getLogger();
-log.level = "debug";
+
+log4js.configure({
+	appenders: {
+		out: { type: "stdout" },
+		file: { type: "file", filename: "./logs/eduhund-bot.log" },
+		slack: {
+			type: "@log4js-node/slack",
+			token: process.env.SLACK_BOT_TOKEN,
+			channel_id: process.env.SLACK_CHANNEL_ID,
+			username: "Bot error handler",
+		},
+	},
+	categories: {
+		default: { appenders: ["out"], level: "debug" },
+		local: { appenders: ["out"], level: "debug" },
+		test: { appenders: ["out", "file"], level: "debug" },
+		prod: { appenders: ["out", "file", "slack"], level: "info" },
+	},
+});
+
+const log = log4js.getLogger(process.env.MACHINE);
 
 module.exports = { log };

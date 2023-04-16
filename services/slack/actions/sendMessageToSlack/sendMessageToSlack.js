@@ -1,3 +1,5 @@
+const { log } = require("../../../../services/log/log");
+
 const {
 	mainMessage,
 	threadMessage,
@@ -21,15 +23,18 @@ async function sendMessageToSlack({ from, to, message, data }) {
 
 	const messageFn = messageType[message.type];
 	if (messageFn) {
-		web.chat.postMessage(messageFn({ from, to, message, data }));
+		await web.chat.postMessage(messageFn({ from, to, message, data }));
+		log.debug("Slack — Message has been sent: ", { from, to, message, data });
 	} else {
 		if (!to?.threadId) {
 			const response = await web.chat.postMessage(
 				mainMessage({ from, to, message })
 			);
+			log.debug("Slack — Message has been sent: ", { from, to, message, data });
 			return response?.ts;
 		} else {
 			await web.chat.postMessage(threadMessage({ from, to, message }));
+			log.debug("Slack — Message has been sent: ", { from, to, message, data });
 			return to.threadId;
 		}
 	}
