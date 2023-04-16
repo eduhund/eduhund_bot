@@ -13,8 +13,8 @@ log4js.configure({
 	},
 	categories: {
 		default: { appenders: ["out"], level: "debug" },
-		local: { appenders: ["out"], level: "debug" },
-		test: { appenders: ["out", "file"], level: "debug" },
+		local: { appenders: ["out", "slack"], level: "debug" },
+		test: { appenders: ["out", "file", "slack"], level: "debug" },
 		prod: { appenders: ["out", "file", "slack"], level: "info" },
 	},
 });
