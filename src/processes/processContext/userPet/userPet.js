@@ -21,7 +21,7 @@ async function userPet({ from }) {
 		await sendMessageToTelegram({
 			to: from,
 			intent: "error",
-			lang: lang,
+			lang: from.lang,
 		});
 		return { OK: false, newBotContext: undefined };
 	}

@@ -36,4 +36,4 @@ log4js.configure({
 
 const log = log4js.getLogger(process.env.MACHINE);
 
-module.exports = { log };
+module.exports = log;
