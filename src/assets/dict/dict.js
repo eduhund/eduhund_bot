@@ -1,7 +1,10 @@
 const ru = require("./ru.json");
 const en = require("./en.json");
+const de = require("./de.json");
+const fr = require("./fr.json");
+const es = require("./es.json");
 
-const langs = { ru, en };
+const langs = { ru, en, de, fr, es };
 
 const DEFAULT_LANG = process.env.DEFAULT_LANG || "en";
 
