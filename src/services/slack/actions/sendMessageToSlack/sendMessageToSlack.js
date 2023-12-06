@@ -8,6 +8,7 @@ const {
 	closeThreadManual,
 	reopenThreadManual,
 	catReport,
+	taskComment
 } = require("../../messageBuilder/messageBuilder");
 
 const { web } = require("../../slack");
@@ -19,6 +20,7 @@ async function sendMessageToSlack({ from, to, message, data }) {
 		closeThreadManual,
 		reopenThreadManual,
 		catReport,
+		taskComment
 	};
 
 	const messageFn = messageType[message.type];

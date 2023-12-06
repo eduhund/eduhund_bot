@@ -9,6 +9,7 @@ const {
 	reopenThreadManual,
 } = require("./reopenThreadManual/reopenThreadManual");
 const catReport = require("./catReport/catReport");
+const { taskComment } = require("./taskComment/taskComment");
 
 const slackMessages = {
 	mainMessage,
@@ -19,6 +20,7 @@ const slackMessages = {
 	dmSuccess,
 	closeThreadManual,
 	catReport,
+	taskComment,
 	//deprecated
 	reopenThreadManual,
 };
