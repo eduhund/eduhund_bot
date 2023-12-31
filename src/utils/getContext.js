@@ -37,6 +37,15 @@ function getSlackContext(message) {
 	) {
 		return "sAnswer";
 	}
+
+	if (
+		(message?.subtype === undefined || message?.subtype === "file_share") &&
+		message?.text.includes("<@U04SQQV7VPS>") &&
+		message?.thread_ts
+	) {
+		return "sComment";
+	}
+
 	return undefined;
 }
 

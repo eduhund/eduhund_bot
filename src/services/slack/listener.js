@@ -12,7 +12,9 @@ function slackListenerRun() {
 		log.debug("Slack — New message: ", payload);
 		const data = await incomingData(payload);
 		const context = getSlackContext(payload);
-		await processContext(context, data);
+		if (context) {
+			await processContext(context, data);
+		}
 	});
 
 	listener.command("/broadcast", async ({ payload, ack }) => {

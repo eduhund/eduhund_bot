@@ -25,8 +25,9 @@ async function sendMessageToSlack({ from, to, message, data }) {
 
 	const messageFn = messageType[message.type];
 	if (messageFn) {
-		await web.chat.postMessage(messageFn({ from, to, message, data }));
+		const response = await web.chat.postMessage(messageFn({ from, to, message, data }));
 		log.debug("Slack — Message has been sent: ", { from, to, message, data });
+		return response?.ts;
 	} else {
 		if (!to?.threadId) {
 			const response = await web.chat.postMessage(

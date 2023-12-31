@@ -15,6 +15,7 @@ const USERS = botDB.collection("users");
 const THREADS = botDB.collection("threads");
 const HISTORY = botDB.collection("history");
 const ACTIONS = botDB.collection("actions");
+const COMMENTS = botDB.collection("comments");
 
 const platformDB = client.db(platformDatabase);
 const STUDENTS = platformDB.collection("users");
@@ -35,6 +36,7 @@ module.exports = {
 	THREADS,
 	HISTORY,
 	ACTIONS,
+	COMMENTS,
 	STUDENTS,
 	MODULES,
 };

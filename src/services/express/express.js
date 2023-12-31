@@ -1,6 +1,7 @@
 const { log } = require("../../services/log/log");
 const express = require("express");
 const { sendMessageToSlack } = require("@sl/actions/actions");
+const getDBRequest = require("../database/requests");
 
 // Read a server port from the environment variables
 const { SERVER_PORT = 8000, ADMIN_TOKEN, SLACK_CHANNEL} = process.env;
@@ -25,7 +26,7 @@ async function sendMessage(req, res) {
 		switch (type) {
 			case "taskComment":
 	
-				await sendMessageToSlack({
+				const threadId = await sendMessageToSlack({
 					from: data,
 					to: {
 						channelId: SLACK_CHANNEL
@@ -35,6 +36,8 @@ async function sendMessage(req, res) {
 						text
 					},
 				});
+
+				await getDBRequest("addTaskComment", {data, text, threadId})
 	
 		}
 		res.sendStatus(200)

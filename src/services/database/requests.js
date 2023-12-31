@@ -11,6 +11,8 @@ const getModulesList = require("./getModulesList/getModulesList");
 const getStudentsList = require("./getStudentsList/getStudentsList");
 const getUsersList = require("./getUsersList/getUsersList");
 const getActions = require("./getActions/getActions");
+const addTaskComment = require("./addTaskComment/addTaskComment");
+const getTaskComment = require("./getTaskComment/getTaskComment");
 
 const REQUESTS = {
 	getUserInfo,
@@ -26,6 +28,8 @@ const REQUESTS = {
 	getStudentsList,
 	getUsersList,
 	getActions,
+	addTaskComment,
+	getTaskComment
 };
 
 function getDBRequest(type, params) {

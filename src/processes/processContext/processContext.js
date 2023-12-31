@@ -15,6 +15,7 @@ const {
 	forwardMessageToSlack,
 } = require("./forwardMessageToSlack/forwardMessageToSlack");
 const { answerToStudent } = require("./answerToStudent/answerToStudent");
+const { sendCommentReply } = require("./sendCommentReply/sendCommentReply");
 
 function processContext(context, data, botContext) {
 	try {
@@ -42,6 +43,9 @@ function processContext(context, data, botContext) {
 				return forwardMessageToSlack(data);
 			case "sAnswer":
 				return answerToStudent(data);
+			case "sComment":
+				console.log("process:", data)
+				return sendCommentReply(data);
 		}
 	} catch (e) {
 		log.warn("Error in context process:", e);
